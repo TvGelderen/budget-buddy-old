@@ -1,0 +1,17 @@
+package layout
+
+import "github.com/TvGelderen/budget-buddy/view/components"
+
+templ Base() {
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <title>BudgetBuddy</title>
+        <link rel="stylesheet" href="/assets/css/app.css" />
+      </head>
+      <body>
+        @components.Header()
+        { children... }
+      </body>
+    </html>
+}

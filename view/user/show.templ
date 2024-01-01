@@ -1,0 +1,12 @@
+package user
+
+import (
+    "github.com/TvGelderen/budget-buddy/view/layout"
+    "github.com/TvGelderen/budget-buddy/model"
+)
+
+templ Show(user model.User) {
+    @layout.Base() {
+        <h2>User page: { user.Name }</h2>
+    }
+}
