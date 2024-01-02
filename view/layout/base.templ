@@ -1,10 +1,13 @@
 package layout
 
-import "github.com/TvGelderen/budget-buddy/view/components"
+import (
+    "github.com/TvGelderen/budget-buddy/view/components"
+    "github.com/TvGelderen/budget-buddy/model"
+)
 
-templ Base() {
+templ Base(user model.User) {
 	@Page() {
-		@components.Header()
+		@components.Header(user)
 		<div class="page-container">
 			{ children... }
 		</div>

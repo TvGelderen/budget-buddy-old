@@ -6,7 +6,7 @@ import (
 )
 
 templ Show(user model.User) {
-    @layout.Base() {
-        <h2>User page: { user.Name }</h2>
+    @layout.Base(user) {
+        <h2>User: { user.Name }</h2>
     }
 }

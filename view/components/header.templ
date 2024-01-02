@@ -1,13 +1,30 @@
 package components
 
-templ Header() {
-    <nav>
-        <div class="logo-container">
-            <a class="logo-title nav-link" href="/">BudgetBuddy</a>
-        </div>
-        <div class="nav-options">
-            <a class="nav-link" href="/">Home</a>
-            <a class="nav-link" href="/dashboard">Dashboard</a>
-        </div>
-    </nav>
+import "github.com/TvGelderen/budget-buddy/model"
+
+templ Header(user model.User) {
+	<header>
+		<div class="header-content">
+			<div class="header-left">
+				<nav>
+					<div class="logo-container">
+						<a class="logo-title nav-link" href="/">BudgetBuddy</a>
+					</div>
+					<div class="nav-options">
+						<a class="nav-link" href="/">Home</a>
+						<a class="nav-link" href="/dashboard">Dashboard</a>
+					</div>
+				</nav>
+			</div>
+			<div class="header-right">
+				<div class="user-icon">
+					<span class="material-symbols-outlined icon">person</span>
+					<div id="user-dropdown" class="absolute">
+						<div>Hi, { user.Name }!</div>
+                        <a class="button" href="/login">Login</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>
 }

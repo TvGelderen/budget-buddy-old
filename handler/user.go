@@ -18,10 +18,29 @@ func (h UserHandler) HandleUserShow(c echo.Context) error {
     return render(c, user.Show(userDto))
 }
 
-func (h UserHandler) HandleHomePageShow(c echo.Context) error {
-    return render(c, pages.Index()); 
+func (h UserHandler) HandleHomePage(c echo.Context) error {
+    userDto := model.User{
+        Name: "Tester01",
+        Email: "test@test.com",
+    }
+
+    return render(c, pages.Index(userDto)); 
 }
 
-func (h UserHandler) HandleDashboardPageShow(c echo.Context) error {
-    return render(c, pages.Dashboard()); 
+func (h UserHandler) HandleDashboardPage(c echo.Context) error {
+    userDto := model.User{
+        Name: "Tester01",
+        Email: "test@test.com",
+    }
+
+    return render(c, pages.Dashboard(userDto)); 
+}
+
+func (h UserHandler) HandleLoginPage(c echo.Context) error {
+    userDto := model.User{
+        Name: "Tester01",
+        Email: "test@test.com",
+    }
+
+    return render(c, pages.Login(userDto));
 }

@@ -5,8 +5,10 @@ import (
     "github.com/TvGelderen/budget-buddy/model"
 )
 
-templ Dashboard(user model.User) {
+templ Login(user model.User) {
     @layout.Base(user) {
-        <h1>Dashboard</h1>
+        <div>
+            <h1>Login</h1>
+        </div>
     }
 }

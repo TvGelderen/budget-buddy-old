@@ -26,9 +26,12 @@ func main() {
     fs := http.FileServer(http.Dir("assets"))
     app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
 
-    app.GET("/", userHandler.HandleHomePageShow)
-    app.GET("/dashboard", userHandler.HandleDashboardPageShow)
+    app.GET("/", userHandler.HandleHomePage)
+    app.GET("/dashboard", userHandler.HandleDashboardPage)
     app.GET("/user", userHandler.HandleUserShow)
+
+    app.GET("/login", userHandler.HandleLoginPage)
+    app.GET("/register", userHandler.HandleLoginPage)
 
     app.Start(":" + port)
 }
