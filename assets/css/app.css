@@ -1,10 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
 * {
+    --background: #101010;
+    --background-secondary: #181818;
+
+    --theme: #ff7700;
+    --theme-secondary: #ffaa44;
+    --theme-tertiary: #ffaa00;
+
     padding: 0;
     margin: 0;
+    background-color: var(--background);
+    color: #ffffff;
+
+    font-family: 'Montserrat', monospace;
+}
+
+.page-container {
+    margin: 0 auto;
+    padding: 1rem;
 }
 
 nav {
     display: flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
 }
 
 .nav-options {
@@ -12,11 +32,18 @@ nav {
 }
 
 .nav-link {
-    margin-left: 8px;
-    color: black;
+    margin-right: 1.5rem;
+    font-size: 1.25rem;
+    color: #ffffff;
     text-decoration: none;
 }
 
 .nav-link:hover {
-    color: blue;
+    color: var(--theme);
+}
+
+.logo-title {
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--theme);
 }

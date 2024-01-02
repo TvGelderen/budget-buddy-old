@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/TvGelderen/budget-buddy/handler"
@@ -22,11 +23,12 @@ func main() {
 
     userHandler := handler.UserHandler{}
 
+    fs := http.FileServer(http.Dir("assets"))
+    app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
+
     app.GET("/", userHandler.HandleHomePageShow)
     app.GET("/dashboard", userHandler.HandleDashboardPageShow)
     app.GET("/user", userHandler.HandleUserShow)
 
     app.Start(":" + port)
-
-    fmt.Print("Hello world\n")
 }
