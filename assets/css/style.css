@@ -553,6 +553,11 @@ video {
   margin-right: auto;
 }
 
+.my-2 {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
 .my-4 {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -562,12 +567,12 @@ video {
   display: flex;
 }
 
-.max-w-\[1400px\] {
-  max-width: 1400px;
+.max-w-96 {
+  max-width: 24rem;
 }
 
-.max-w-\[500px\] {
-  max-width: 500px;
+.max-w-\[1400px\] {
+  max-width: 1400px;
 }
 
 .items-center {
