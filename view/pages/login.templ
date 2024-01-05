@@ -7,21 +7,21 @@ import (
 
 templ Login(user model.User) {
     @layout.Base(user) {
-        <div class="max-w-96 mx-auto">
+        <div class="bg-secondary max-w-sm mx-auto p-6 rounded">
             <h1>Login</h1>
-            <form class="max-w-96 mx-auto" id="loginForm" hx-post="api/login" hx-target="#loginResult">
-                <div class="flex justify-between my-4">
+            <form class="max-w-sm mx-auto" id="loginForm" hx-post="api/login" hx-target="#loginResult">
+                <div class="flex justify-between align-center my-4">
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required />
+                    <input class="bg-tertiary px-2 py-1 rounded" type="text" id="username" name="username" placeholer="username" required />
                 </div>
 
                 <div class="flex justify-between my-4">
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required />
+                    <input class="bg-tertiary px-2 py-1 rounded" type="password" id="password" name="password" placeholer="password" required />
                 </div>
 
                 <div>
-                    <button type="submit" hx-target="#loginResult">Login</button>
+                    <button class="bg-tertiary px-2 py-1 rounded" type="submit" hx-target="#loginResult">Login</button>
                 </div>
             </form>
             <div id="loginResult"></div>
