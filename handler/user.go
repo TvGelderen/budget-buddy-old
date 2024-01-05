@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/TvGelderen/budget-buddy/model"
-	"github.com/TvGelderen/budget-buddy/view/user"
 	"github.com/TvGelderen/budget-buddy/view/pages"
+	"github.com/TvGelderen/budget-buddy/view/user"
 	"github.com/labstack/echo/v4"
 )
 
@@ -43,4 +45,8 @@ func (h UserHandler) HandleLoginPage(c echo.Context) error {
     }
 
     return render(c, pages.Login(userDto));
+}
+
+func (h UserHandler) HandleLogin(c echo.Context) error {
+    return c.HTML(http.StatusOK, "<strong>Success!</strong>")
 }

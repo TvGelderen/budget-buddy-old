@@ -32,6 +32,8 @@ func main() {
 
     app.GET("/login", userHandler.HandleLoginPage)
     app.GET("/register", userHandler.HandleLoginPage)
+     
+    app.POST("/api/login", userHandler.HandleLogin)
 
     app.Start(":" + port)
 }
