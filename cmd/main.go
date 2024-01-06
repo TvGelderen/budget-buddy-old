@@ -1,11 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/handler"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -22,14 +24,21 @@ func main() {
         fmt.Print("PORT is missing, defaulting to 3000")
     }
     
-    connectionString := os.Getenv("DB_CONNECTION_STRING")
-    if connectionString == "" {
+    dbConnectionString := os.Getenv("DB_CONNECTION_STRING")
+    if dbConnectionString == "" {
         log.Fatal("No database connection string found.")
     }
 
-    app := echo.New()
+    connection, err := sql.Open("postgres", dbConnectionString)
+    if err != nil {
+        log.Fatal("Unable to establish connection with database: ", err)
+    }
 
-    apiCfg := handler.ApiConfig{}
+    apiCfg := handler.ApiConfig {
+        DB: database.New(connection),
+    }
+    
+    app := echo.New()
 
     fs := http.FileServer(http.Dir("assets"))
     app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
