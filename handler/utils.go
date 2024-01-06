@@ -2,9 +2,11 @@ package handler
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/model"
+	"github.com/TvGelderen/budget-buddy/utils"
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
 )
@@ -13,13 +15,35 @@ type ApiConfig struct {
     DB *database.Queries
 }
 
-func GetUser() model.User {
-    userDto := model.User{
-        Name: "Tester01",
-        Email: "test@test.com",
+func mapDbUserToUser(dbUser database.User) model.User {
+    return model.User {
+        Username: dbUser.Username,
+        Email: dbUser.Email,
+    }
+}
+    
+func (apiCfg *ApiConfig) GetUser(r *http.Request) model.User {
+    token, err := utils.GetToken(r)
+    if err != nil {
+        fmt.Printf("Error: %v", err)
+        return model.User{}
     }
 
-    return userDto
+    id, err := utils.GetIdFromJWT(token)
+    if err != nil {
+        fmt.Printf("Error: %v", err)
+        return model.User{}
+    }
+
+    fmt.Printf("id: %v", id)
+
+    user, err := apiCfg.DB.GetUserById(r.Context(), id)
+    if err != nil {
+        fmt.Printf("Error: %v", err)
+        return model.User{}
+    }
+
+    return mapDbUserToUser(user)
 }
 
 func render(c echo.Context, component templ.Component) error {

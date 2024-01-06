@@ -1,11 +1,9 @@
 package utils
 
 import (
-	"errors"
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -46,27 +44,10 @@ func RemoveToken(w http.ResponseWriter) {
 func GetToken(r *http.Request) (string, error) {
     cookie, err := r.Cookie("AccessToken")
     if err != nil {
-        if errors.Is(err, http.ErrNoCookie) {
-            return GetTokenFromHeader(r.Header)
-        }
         return "", err
     }
 
     return cookie.Value, nil
-}
-
-func GetTokenFromHeader(header http.Header) (string, error) {
-    val := header.Get("Authorization");
-    if val == "" {
-        return "", errors.New("no authentication info found")
-    }
-
-    token := strings.Split(val, " ");
-    if len(token) != 2 || token[0] != "Bearer" {
-        return "", errors.New("malformed authentication info")
-    }
-
-    return token[1], nil;
 }
 
 func HashPassword(password string) ([]byte, error) {

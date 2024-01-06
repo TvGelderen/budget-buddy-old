@@ -19,8 +19,8 @@ templ Header(user model.User) {
 			<div>
 				<span class="material-symbols-outlined text-3xl">person</span>
 				<div id="user-dropdown" class="absolute">
-					<div>Hi, { user.Name }!</div>
-					if user.Name == "" {
+					<div>Hi, { user.Username }!</div>
+					if user.Username == "" {
 						<a href="/login">Login</a>
 					} else {
 						<a href="/loout">Logout</a>

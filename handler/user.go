@@ -6,7 +6,7 @@ import (
 )
 
 func (apiCfg *ApiConfig) HandleUserShow(c echo.Context) error {
-    userDto := GetUser()
+    userDto := apiCfg.GetUser(c.Request())
 
     return render(c, user.Show(userDto))
 }

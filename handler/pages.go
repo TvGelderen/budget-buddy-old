@@ -6,25 +6,25 @@ import (
 )
 
 func (apiCfg *ApiConfig) HandleHomePage(c echo.Context) error {
-    userDto := GetUser()
+    userDto := apiCfg.GetUser(c.Request())
 
     return render(c, pages.Index(userDto)); 
 }
 
 func (apiCfg *ApiConfig) HandleDashboardPage(c echo.Context) error {
-    userDto := GetUser()
+    userDto := apiCfg.GetUser(c.Request())
 
     return render(c, pages.Dashboard(userDto)); 
 }
 
 func (apiCfg *ApiConfig) HandleRegisterPage(c echo.Context) error {
-    userDto := GetUser()
+    userDto := apiCfg.GetUser(c.Request())
 
     return render(c, pages.Register(userDto));
 }
 
 func (apiCfg *ApiConfig) HandleLoginPage(c echo.Context) error {
-    userDto := GetUser()
+    userDto := apiCfg.GetUser(c.Request())
 
     return render(c, pages.Login(userDto));
 }
