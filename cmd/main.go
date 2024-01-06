@@ -48,6 +48,7 @@ func main() {
     app.GET("/user", apiCfg.HandleUserShow)
 
     app.GET("/login", apiCfg.HandleLoginPage)
+    app.GET("/logout", apiCfg.HandleLogout)
     app.GET("/register", apiCfg.HandleRegisterPage)
      
     app.POST("/api/login", apiCfg.HandleLogin)

@@ -83,3 +83,9 @@ func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
 
     return c.HTML(http.StatusOK, successHTML("Logging in.."))
 }
+
+func (apiCfg *ApiConfig) HandleLogout(c echo.Context) error {
+    utils.RemoveToken(c.Response().Writer)
+
+    return c.Redirect(302, "/")
+}
