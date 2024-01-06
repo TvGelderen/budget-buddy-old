@@ -13,14 +13,14 @@ import (
 )
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (id, name, email, password_hash, created_at, updated_at)
+INSERT INTO users (id, username, email, password_hash, created_at, updated_at)
 VALUES ($1, $2, $3, $4, $5, $6)
-RETURNING id, name, email, password_hash, created_at, updated_at
+RETURNING id, username, email, password_hash, created_at, updated_at
 `
 
 type CreateUserParams struct {
 	ID           uuid.UUID
-	Name         string
+	Username     string
 	Email        string
 	PasswordHash []byte
 	CreatedAt    time.Time
@@ -30,7 +30,7 @@ type CreateUserParams struct {
 func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, error) {
 	row := q.db.QueryRowContext(ctx, createUser,
 		arg.ID,
-		arg.Name,
+		arg.Username,
 		arg.Email,
 		arg.PasswordHash,
 		arg.CreatedAt,
@@ -39,7 +39,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
+		&i.Username,
 		&i.Email,
 		&i.PasswordHash,
 		&i.CreatedAt,
@@ -49,7 +49,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (User, e
 }
 
 const getUserByEmail = `-- name: GetUserByEmail :one
-SELECT id, name, email, password_hash, created_at, updated_at FROM users WHERE email = $1
+SELECT id, username, email, password_hash, created_at, updated_at FROM users WHERE email = $1
 `
 
 func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
@@ -57,7 +57,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
+		&i.Username,
 		&i.Email,
 		&i.PasswordHash,
 		&i.CreatedAt,
@@ -67,7 +67,7 @@ func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error
 }
 
 const getUserById = `-- name: GetUserById :one
-SELECT id, name, email, password_hash, created_at, updated_at FROM users WHERE id = $1
+SELECT id, username, email, password_hash, created_at, updated_at FROM users WHERE id = $1
 `
 
 func (q *Queries) GetUserById(ctx context.Context, id uuid.UUID) (User, error) {
@@ -75,7 +75,7 @@ func (q *Queries) GetUserById(ctx context.Context, id uuid.UUID) (User, error) {
 	var i User
 	err := row.Scan(
 		&i.ID,
-		&i.Name,
+		&i.Username,
 		&i.Email,
 		&i.PasswordHash,
 		&i.CreatedAt,

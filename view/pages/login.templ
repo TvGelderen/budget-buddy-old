@@ -9,7 +9,7 @@ templ Login(user model.User) {
     @layout.Base(user) {
         <div class="bg-secondary max-w-md mx-auto p-6 rounded">
             <h1>Login</h1>
-            <form class="max-w-md mx-auto" id="loginForm" hx-post="api/login" hx-target="#loginResult">
+            <form class="max-w-md mx-auto" id="loginForm" hx-post="api/login" hx-target="#loginResult" hx-on="htmx:responseError: showError('loginResult', event)">
                 <div class="flex justify-between align-center my-4">
                     <label for="email">Email:</label>
                     <input class="bg-tertiary px-2 py-1 rounded" type="text" id="email" name="email" placeholer="email" required />
@@ -21,8 +21,8 @@ templ Login(user model.User) {
                 </div>
 
                 <div class="flex justify-between items-center">
-                    <button class="bg-tertiary px-2 py-1 rounded hover:bg-theme hover:text-black" type="submit">Login</button>
-                    <span class="text-sm">Don't have an account? <a class="hover:text-theme" href="/register">Register</a> here.</span>
+                    <button class="bg-tertiary px-2 py-1 rounded hover:bg-theme/[.65]" type="submit">Login</button>
+                    <span class="text-sm text-red-600">Don't have an account? <a class="hover:text-theme" href="/register">Register</a> here.</span>
                 </div>
             </form>
             <div id="loginResult"></div>

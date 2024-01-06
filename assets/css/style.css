@@ -558,12 +558,24 @@ video {
   margin-bottom: 1rem;
 }
 
+.ml-6 {
+  margin-left: 1.5rem;
+}
+
+.mr-3 {
+  margin-right: 0.75rem;
+}
+
 .mt-4 {
   margin-top: 1rem;
 }
 
 .flex {
   display: flex;
+}
+
+.w-\[95\%\] {
+  width: 95%;
 }
 
 .max-w-\[1400px\] {
@@ -584,6 +596,11 @@ video {
 
 .rounded {
   border-radius: 0.25rem;
+}
+
+.bg-primary {
+  --tw-bg-opacity: 1;
+  background-color: rgb(18 18 18 / var(--tw-bg-opacity));
 }
 
 .bg-secondary {
@@ -620,73 +637,51 @@ video {
   padding-bottom: 0.5rem;
 }
 
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
 }
 
-* {
-  --background: #121212;
-  --background-secondary: #181818;
-  --theme: #ff7700;
-  --theme-secondary: #ffaa44;
-  --theme-tertiary: #ffaa00;
-  padding: 0;
-  margin: 0;
-  color: #ffffff;
-  font-family: 'Montserrat', monospace;
-}
-
-body {
-  background-color: var(--background);
-}
-
-header {
-  background-color: var(--background-secondary);
-}
-
-nav {
-  display: flex;
-  align-items: center;
-}
-
-.nav-options {
-  margin-left: 20px;
-}
-
-.nav-link {
-  margin-right: 1.5rem;
+.text-xl {
   font-size: 1.25rem;
-  color: #ffffff;
-  text-decoration: none;
+  line-height: 1.75rem;
 }
 
-.nav-link:hover {
-  color: var(--theme);
-}
-
-.logo-title {
-  font-size: 2rem;
+.font-black {
   font-weight: 900;
-  color: var(--theme);
 }
 
-.page-container {
-  width: min(95%, 1400px);
-  margin: 1rem auto;
+.text-error {
+  --tw-text-opacity: 1;
+  color: rgb(185 28 28 / var(--tw-text-opacity));
 }
 
-.material-symbols-outlined.icon {
-  font-size: 1.75rem;
+.text-success {
+  --tw-text-opacity: 1;
+  color: rgb(22 163 74 / var(--tw-text-opacity));
 }
 
-#user-dropdown {
-  position: absolute;
+.text-theme {
+  --tw-text-opacity: 1;
+  color: rgb(255 119 0 / var(--tw-text-opacity));
 }
 
-.hover\:bg-theme:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(255 119 0 / var(--tw-bg-opacity));
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.no-underline {
+  text-decoration-line: none;
+}
+
+.hover\:bg-theme\/\[\.65\]:hover {
+  background-color: rgb(255 119 0 / .65);
 }
 
 .hover\:text-theme:hover {

@@ -12,7 +12,7 @@ import (
 
 type User struct {
 	ID           uuid.UUID
-	Name         string
+	Username     string
 	Email        string
 	PasswordHash []byte
 	CreatedAt    time.Time

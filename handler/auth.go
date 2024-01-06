@@ -4,15 +4,17 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/utils"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 )
 
 func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
     type parameters struct {
-        Name string `json:"name"`;
+        Username string `json:"username"`;
         Email string `json:"email"`;
         Password string `json:"password"`;
     }
@@ -21,26 +23,29 @@ func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
     err := json.NewDecoder(c.Request().Body).Decode(&params)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "<strong class='mt-4 text-red'>Something went wrong.</strong>")
+        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
     }
 
     passwordHash, err := utils.HashPassword(params.Password)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "<strong class='mt-4 text-red'>Something went wrong.</strong>")
+        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
     }
 
     _, err = apiCfg.DB.CreateUser(c.Request().Context(), database.CreateUserParams{
-        Name: params.Name,
+        ID: uuid.New(),
+        Username: params.Username,
         Email: params.Email,
         PasswordHash: passwordHash,
+        CreatedAt: time.Now(),
+        UpdatedAt: time.Now(),
     })
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, "<strong class='mt-4 text-red'>Something went wrong.</strong>")
+        return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
     }
 
-    return c.HTML(http.StatusOK, "<strong class='mt-4'>Account successfully created.</strong>")
+    return c.HTML(http.StatusOK, successHTML("Account successfully created."))
 }
 
 func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
@@ -53,28 +58,28 @@ func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
     err := json.NewDecoder(c.Request().Body).Decode(&params)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "<strong class='mt-4 text-red'>Something went wrong.</strong>")
+        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
     }
 
     user, err := apiCfg.DB.GetUserByEmail(c.Request().Context(), params.Email)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, "<strong class='mt-4 text-red'>Wrong email or password.</strong>")
+        return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
     }
 
     validPassword := utils.CheckPasswordWithHash(params.Password, user.PasswordHash)
     if !validPassword {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, "<strong class='mt-4 text-red'>Wrong email or password.</strong>")
+        return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
     }
 
-    token, err := utils.CreateNewJWT(user.ID, user.Name)
+    token, err := utils.CreateNewJWT(user.ID, user.Username)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, "<strong class='mt-4 text-red'>Something went wrong.</strong>")
+        return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
     }
 
     utils.SetToken(c.Response().Writer, token)
 
-    return c.HTML(http.StatusOK, "<strong class='mt-4'>Loggin in...</strong>")
+    return c.HTML(http.StatusOK, successHTML("Logging in.."))
 }
