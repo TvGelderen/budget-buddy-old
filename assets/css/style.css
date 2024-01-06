@@ -566,10 +566,6 @@ video {
   display: flex;
 }
 
-.table-cell {
-  display: table-cell;
-}
-
 .max-w-\[1400px\] {
   max-width: 1400px;
 }
@@ -622,14 +618,6 @@ video {
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-.align-middle {
-  vertical-align: middle;
-}
-
-.leading-6 {
-  line-height: 1.5rem;
 }
 
 * {

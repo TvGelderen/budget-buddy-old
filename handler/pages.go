@@ -17,6 +17,12 @@ func (apiCfg *ApiConfig) HandleDashboardPage(c echo.Context) error {
     return render(c, pages.Dashboard(userDto)); 
 }
 
+func (apiCfg *ApiConfig) HandleRegisterPage(c echo.Context) error {
+    userDto := GetUser()
+
+    return render(c, pages.Register(userDto));
+}
+
 func (apiCfg *ApiConfig) HandleLoginPage(c echo.Context) error {
     userDto := GetUser()
 

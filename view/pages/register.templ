@@ -5,11 +5,16 @@ import (
     "github.com/TvGelderen/budget-buddy/model"
 )
 
-templ Login(user model.User) {
+templ Register(user model.User) {
     @layout.Base(user) {
         <div class="bg-secondary max-w-sm mx-auto p-6 rounded">
             <h1>Login</h1>
-            <form class="max-w-sm mx-auto" id="loginForm" hx-post="api/login" hx-ext="json-enc" hx-target="#loginResult">
+            <form class="max-w-sm mx-auto" id="registerForm" hx-post="api/register" hx-ext="json-enc" hx-target="#registerResult">
+                <div class="flex justify-between align-center my-4">
+                    <label for="username">Username:</label>
+                    <input class="bg-tertiary px-2 py-1 rounded" type="text" id="username" name="username" placeholer="username" required />
+                </div>
+
                 <div class="flex justify-between align-center my-4">
                     <label for="email">Email:</label>
                     <input class="bg-tertiary px-2 py-1 rounded" type="text" id="email" name="email" placeholer="email" required />
@@ -21,10 +26,10 @@ templ Login(user model.User) {
                 </div>
 
                 <div>
-                    <button class="bg-tertiary px-2 py-1 rounded" type="submit" hx-target="#loginResult">Login</button>
+                    <button class="bg-tertiary px-2 py-1 rounded" type="submit" hx-target="#registerResult">Register</button>
                 </div>
             </form>
-            <div id="loginResult" class="mt-4"></div>
+            <div id="registerResult" class="mt-4"></div>
         </div>
     }
 }

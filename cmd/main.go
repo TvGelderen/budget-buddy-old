@@ -39,9 +39,10 @@ func main() {
     app.GET("/user", apiCfg.HandleUserShow)
 
     app.GET("/login", apiCfg.HandleLoginPage)
-    app.GET("/register", apiCfg.HandleLoginPage)
+    app.GET("/register", apiCfg.HandleRegisterPage)
      
     app.POST("/api/login", apiCfg.HandleLogin)
+    app.POST("/api/register", apiCfg.HandleRegister)
 
     app.Start(":" + port)
 }
