@@ -5,7 +5,7 @@ import "github.com/TvGelderen/budget-buddy/model"
 templ Header(user model.User) {
 	<header class="bg-secondary">
 		<div class="max-w-[1400px] flex justify-between items-center px-4 py-2 mx-auto">
-			<div class="header-left">
+			<div>
 				<nav class="flex items-center">
 					<div class="logo-container">
 						<a class="mr-3 text-3xl font-black no-underline text-theme" href="/">BudgetBuddy</a>
@@ -16,15 +16,17 @@ templ Header(user model.User) {
 					</div>
 				</nav>
 			</div>
-			<div>
-				<span class="material-symbols-outlined text-3xl">person</span>
-				<div id="user-dropdown" class="absolute">
+			<div id="user-dropdown" class="relative">
+				<span class="material-symbols-outlined text-3xl cursor-pointer" onclick="toggleUserDropdown()">person</span>
+				<div class="absolute min-w-[200px] bg-tertiary right-0 p-4 rounded-lg">
 					<div>Hi, { user.Username }!</div>
-					if user.Username == "" {
-						<a href="/login">Login</a>
-					} else {
-						<a href="/loout">Logout</a>
-					}
+                    <div class="mt-4">
+                        if user.Username == "" {
+                            <a href="/login">Login</a>
+                        } else {
+                            <a class="px-4 py-2 rounded-md bg-theme/[.65]" href="/logout">Logout</a>
+                        }
+                    </div>
 				</div>
 			</div>
 		</div>

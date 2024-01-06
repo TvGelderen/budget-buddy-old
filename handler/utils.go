@@ -35,8 +35,6 @@ func (apiCfg *ApiConfig) GetUser(r *http.Request) model.User {
         return model.User{}
     }
 
-    fmt.Printf("id: %v", id)
-
     user, err := apiCfg.DB.GetUserById(r.Context(), id)
     if err != nil {
         fmt.Printf("Error: %v", err)
