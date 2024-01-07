@@ -10,6 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type Transaction struct {
+	ID        int32
+	UserID    uuid.UUID
+	Amount    int32
+	Incoming  interface{}
+	Recurring string
+}
+
 type User struct {
 	ID           uuid.UUID
 	Username     string

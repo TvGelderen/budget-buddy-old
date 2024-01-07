@@ -8,5 +8,14 @@ CREATE TABLE users (
     updated_at TIMESTAMP NOT NULL
 );
 
+CREATE TABLE transactions (
+    id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    amount INT NOT NULL,
+    incoming BIT NOT NULL,
+    recurring TEXT NOT NULL
+);
+
 -- +goose Down
+DROP TABLE transactions;
 DROP TABLE users;
