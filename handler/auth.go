@@ -45,7 +45,9 @@ func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
         return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
     }
 
-    return c.HTML(http.StatusOK, successHTML("Account successfully created."))
+    c.Response().Writer.Header().Set("Hx-Redirect", "/")
+
+    return nil
 }
 
 func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
@@ -81,7 +83,9 @@ func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
 
     utils.SetToken(c.Response().Writer, token)
 
-    return c.HTML(http.StatusOK, successHTML("Logging in.."))
+    c.Response().Writer.Header().Set("Hx-Redirect", "/")
+
+    return nil
 }
 
 func (apiCfg *ApiConfig) HandleLogout(c echo.Context) error {

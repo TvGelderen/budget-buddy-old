@@ -5,13 +5,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0');
 
-* {
-    font-size: 13px;
-}
-
 #nav-bar {
     margin-left: -320px;
-    transition: margin-left .4s ease-in-out;
+    transition: margin-left 0s ease-in-out;
 }
 
 #nav-bar + .nav-bar-backdrop {
@@ -20,39 +16,31 @@
 
 #nav-bar[open] {
     margin-left: 0;
+    transition: margin-left 0.4s ease-in-out;
 }
 
 #nav-bar[open] + .nav-bar-backdrop {
     display: block;
 }
 
-/* sd */
-@media (min-width: 640px) {
-    * {
-        font-size: 14px;
-    }
-}
 /* md */
 @media (min-width: 768px) {
-    * {
-        font-size: 15px;
-    }
-
     #nav-bar {
         margin-left: 0;
+        transition: margin-left 0s ease-in-out;
     }
 
-    .nav-bar-backdrop {
+    .nav-bar-backdrop,
+    #nav-bar[open] + .nav-bar-backdrop {
         display: none;
-    }
-}
-/* lg */
-@media (min-width: 1024px) {
-    * {
-        font-size: 16px;
     }
 }
 
 #user-dropdown:not([open]) > div {
     display: none;
 }
+
+.button {
+    @apply px-4 py-2 rounded-md bg-white/[.1] hover:bg-theme/75;
+}
+
