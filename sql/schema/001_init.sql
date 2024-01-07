@@ -11,8 +11,8 @@ CREATE TABLE users (
 CREATE TABLE transactions (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    amount INT NOT NULL,
-    incoming BIT NOT NULL,
+    amount DOUBLE PRECISION NOT NULL,
+    incoming BOOLEAN NOT NULL,
     recurring TEXT NOT NULL
 );
 

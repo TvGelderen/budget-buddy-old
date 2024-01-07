@@ -1,0 +1,47 @@
+package components
+
+templ AddTransaction() {
+	<div class="w-full">
+		<button class="button secondary float-right flex items-center" onclick="toggleModal('add-transaction-modal')">
+			<span class="material-symbols-outlined text-md mr-2">add</span> Add transaction
+		</button>
+		<dialog id="add-transaction-modal" class="w-[480px]">
+			<button class="absolute top-2 right-2" onclick="toggleModal('add-transaction-modal')">
+				<span class="material-symbols-outlined text-xl lg:text-2xl">close</span>
+			</button>
+			<p class="text-lg lg:text-xl">Add transaction</p>
+			<form
+				class="max-w-md mx-auto"
+				id="registerForm"
+				hx-post="api/transactions"
+				hx-target="#addTransactionResult"
+				hx-on="htmx:responseError: showError('addTransactionResult', event)"
+			>
+				<div class="flex justify-between align-center my-4">
+					<label for="amount">Amount:</label>
+					<input class="input" type="number" step="0.01" id="amount" name="amount" required/>
+				</div>
+				<div class="flex justify-between align-center my-4">
+					<label for="incoming">Type:</label>
+					<select class="input" id="incoming" name="incoming">
+						<option value="1">Income</option>
+						<option value="0">Expense</option>
+					</select>
+				</div>
+				<div class="flex justify-between my-4">
+					<label for="recurring">Recurring:</label>
+					<select class="input" id="recurring" name="recurring">
+						<option value="no">No</option>
+						<option value="weekly">Weekly</option>
+						<option value="monthly">Monthly</option>
+						<option value="other">Other</option>
+					</select>
+				</div>
+				<div>
+					<button class="button" type="submit">Add</button>
+				</div>
+			</form>
+            <div id="addTransactionResult"></div>
+		</dialog>
+	</div>
+}

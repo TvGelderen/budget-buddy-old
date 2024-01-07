@@ -17,6 +17,7 @@ type ApiConfig struct {
 
 func mapDbUserToUser(dbUser database.User) model.User {
     return model.User {
+        Id: dbUser.ID,
         Username: dbUser.Username,
         Email: dbUser.Email,
     }

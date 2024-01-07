@@ -21,8 +21,7 @@ func (apiCfg *ApiConfig) HandleRegisterPage(c echo.Context) error {
     userDto := apiCfg.GetUser(c.Request())
     
     if userDto.Username != "" {
-        err := c.Redirect(302, "/")
-        return err
+        return c.Redirect(302, "/")
     }
 
     return render(c, pages.Register(userDto));
@@ -32,8 +31,7 @@ func (apiCfg *ApiConfig) HandleLoginPage(c echo.Context) error {
     userDto := apiCfg.GetUser(c.Request())
 
     if userDto.Username != "" {
-        err := c.Redirect(302, "/")
-        return err
+        return c.Redirect(302, "/")
     }
 
     return render(c, pages.Login(userDto));

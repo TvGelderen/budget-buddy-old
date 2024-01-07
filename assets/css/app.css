@@ -41,6 +41,21 @@
 }
 
 .button {
-    @apply px-4 py-2 rounded-md bg-white/[.1] hover:bg-theme/75;
+    @apply px-4 py-2 rounded-md bg-theme/75 hover:bg-theme;
 }
 
+.button.secondary {
+    @apply bg-white/10;
+}
+
+.input {
+    @apply bg-tertiary px-2 py-1 rounded border-2 border-tertiary focus:outline-none focus:border-theme;
+}
+
+dialog {
+    @apply bg-secondary text-white p-4 rounded-lg;
+}
+
+dialog::backdrop {
+    @apply bg-primary/75;
+}

@@ -13,8 +13,8 @@ import (
 type Transaction struct {
 	ID        int32
 	UserID    uuid.UUID
-	Amount    int32
-	Incoming  interface{}
+	Amount    float64
+	Incoming  bool
 	Recurring string
 }
 

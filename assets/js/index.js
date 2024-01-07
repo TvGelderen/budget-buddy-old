@@ -44,3 +44,16 @@ function showError(id, event) {
 
     element.innerHTML = event.detail.xhr.response;
 }
+
+function toggleModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    console.log(modal);
+
+    if (modal.hasAttribute("open")) {
+        modal.close();
+    } else {
+        modal.showModal();
+    }
+}

@@ -19,8 +19,8 @@ RETURNING id, user_id, amount, incoming, recurring
 
 type CreateTransactionParams struct {
 	UserID    uuid.UUID
-	Amount    int32
-	Incoming  interface{}
+	Amount    float64
+	Incoming  bool
 	Recurring string
 }
 
