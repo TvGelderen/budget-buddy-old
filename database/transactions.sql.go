@@ -108,12 +108,12 @@ func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID u
 	return items, nil
 }
 
-const getTransactionslByUserId = `-- name: GetTransactionslByUserId :many
+const getTransactionsByUserId = `-- name: GetTransactionsByUserId :many
 SELECT id, user_id, amount, incoming, recurring FROM transactions WHERE user_id = $1
 `
 
-func (q *Queries) GetTransactionslByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
-	rows, err := q.db.QueryContext(ctx, getTransactionslByUserId, userID)
+func (q *Queries) GetTransactionsByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getTransactionsByUserId, userID)
 	if err != nil {
 		return nil, err
 	}

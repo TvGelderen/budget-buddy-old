@@ -22,6 +22,14 @@ func mapDbUserToUser(dbUser database.User) model.User {
         Email: dbUser.Email,
     }
 }
+
+func mapDbTransactionToTransaction(dbTransaction database.Transaction) model.Transaction {
+    return model.Transaction{
+        Amount: dbTransaction.Amount,
+        Incoming: dbTransaction.Incoming,
+        Recurring: dbTransaction.Recurring,
+    }
+}
     
 func (apiCfg *ApiConfig) GetUser(r *http.Request) model.User {
     token, err := utils.GetToken(r)

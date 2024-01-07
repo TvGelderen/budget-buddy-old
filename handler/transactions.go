@@ -7,6 +7,8 @@ import (
 	"strconv"
 
 	"github.com/TvGelderen/budget-buddy/database"
+	"github.com/TvGelderen/budget-buddy/model"
+	"github.com/TvGelderen/budget-buddy/view/components"
 	"github.com/labstack/echo/v4"
 )
 
@@ -49,4 +51,24 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
     }
 
     return c.HTML(http.StatusOK, successHTML("Transaction added successfully."))
+}
+
+func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
+    user := apiCfg.GetUser(c.Request())
+    if user.Username == "" {
+        return c.HTML(http.StatusBadRequest, errorHTML("You are not logged in."))
+    }
+
+    dbTransactions, err := apiCfg.DB.GetTransactionsByUserId(c.Request().Context(), user.Id)
+    if err != nil {
+        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+    }
+
+    var transactions []model.Transaction
+
+    for i := 0; i < len(dbTransactions); i++ {
+        transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i]))
+    }
+    
+    return render(c, components.TransactionsTable(transactions))
 }

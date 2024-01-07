@@ -54,6 +54,7 @@ func main() {
     app.POST("/api/register", apiCfg.HandleRegister)
 
     app.POST("/api/transactions", apiCfg.HandleCreateTransaction)
+    app.GET("/api/transactions", apiCfg.HandleGetTransactions)
 
     app.Start(":" + port)
 }
