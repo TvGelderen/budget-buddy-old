@@ -45,7 +45,6 @@ func main() {
 
     app.GET("/", apiCfg.HandleHomePage)
     app.GET("/dashboard", apiCfg.HandleDashboardPage)
-    app.GET("/user", apiCfg.HandleUserShow)
 
     app.GET("/login", apiCfg.HandleLoginPage)
     app.GET("/logout", apiCfg.HandleLogout)

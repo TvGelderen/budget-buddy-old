@@ -4,31 +4,37 @@ import "github.com/TvGelderen/budget-buddy/model"
 
 templ Header(user model.User) {
 	<header class="bg-secondary">
-		<div class="max-w-[1400px] flex justify-between items-center px-4 py-2 mx-auto">
+		<div class="w-[calc(100%-1rem)] max-w-[1400px] flex items-center py-2 mx-auto">
 			<div>
-				<nav class="flex items-center">
-					<div class="logo-container">
-						<a class="mr-3 text-3xl font-black no-underline text-theme" href="/">BudgetBuddy</a>
-					</div>
-					<div class="ml-6">
-						<a class="mr-3 text-xl no-underline hover:text-theme" href="/">Home</a>
-						<a class="mr-3 text-xl no-underline hover:text-theme" href="/dashboard">Dashboard</a>
-					</div>
+				<a class="mr-3 text-3xl font-black no-underline text-theme" href="/">BudgetBuddy</a>
+			</div>
+			<div id="nav-bar" class="w-[320px] md:w-full md:flex absolute md:relative justify-between left-0 top-0 bottom-0 z-[1] bg-tertiary md:bg-secondary">
+                <div class="md:hidden ml-2 mt-2">
+                    <a class="mr-3 text-3xl font-black no-underline text-theme" href="/">BudgetBuddy</a>
+                </div>
+				<nav class="flex flex-col md:flex-row md:items-center ml-3 md:ml-6 mt-6 md:mt-0">
+                    <a class="mr-4 text-xl no-underline hover:text-theme active:text-theme" href="/">Home</a>
+                    <a class="mr-4 text-xl no-underline hover:text-theme" href="/dashboard">Dashboard</a>
 				</nav>
-			</div>
-			<div id="user-dropdown" class="relative">
-				<span class="material-symbols-outlined text-3xl cursor-pointer" onclick="toggleUserDropdown()">person</span>
-				<div class="absolute min-w-[200px] bg-tertiary right-0 p-4 rounded-lg">
-                    if user.Username == "" {
-                        <a class="px-4 py-2 rounded-md bg-theme/[.65]" href="/login">Login</a>
-                    } else {
-                        <div>Hi, { user.Username }!</div>
-                        <div class="mt-4">
-                            <a class="px-4 py-2 rounded-md bg-theme/[.65]" href="/logout">Logout</a>
-                        </div>
-                    }
+				<div id="user-dropdown" class="hidden md:block relative">
+					<span class="material-symbols-outlined text-3xl cursor-pointer" onclick="toggleUserDropdown()">person</span>
+					<div class="absolute min-w-[200px] bg-tertiary right-0 p-4 rounded-lg">
+						if user.Username == "" {
+							<a class="px-4 py-2 rounded-md bg-theme/[.65]" href="/login">Login</a>
+						} else {
+							<div>Hi, { user.Username }!</div>
+							<div class="mt-4">
+								<a class="px-4 py-2 rounded-md bg-theme/[.65]" href="/logout">Logout</a>
+							</div>
+						}
+					</div>
 				</div>
+                <span class="material-symbols-outlined text-3xl cursor-pointer md:hidden absolute top-2 right-2" onclick="toggleNav()">close</span>
 			</div>
+            <div class="nav-bar-backdrop absolute inset-0 bg-primary/75 z-0" />
+            <div class="md:hidden w-full">
+                <span class="material-symbols-outlined text-3xl cursor-pointer float-right" onclick="toggleNav()">menu</span>
+            </div>
 		</div>
 	</header>
 }

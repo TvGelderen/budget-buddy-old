@@ -25,19 +25,19 @@ func mapDbUserToUser(dbUser database.User) model.User {
 func (apiCfg *ApiConfig) GetUser(r *http.Request) model.User {
     token, err := utils.GetToken(r)
     if err != nil {
-        fmt.Printf("Error: %v", err)
+        fmt.Printf("Error: %v\n", err)
         return model.User{}
     }
 
     id, err := utils.GetIdFromJWT(token)
     if err != nil {
-        fmt.Printf("Error: %v", err)
+        fmt.Printf("Error: %v\n", err)
         return model.User{}
     }
 
     user, err := apiCfg.DB.GetUserById(r.Context(), id)
     if err != nil {
-        fmt.Printf("Error: %v", err)
+        fmt.Printf("Error: %v\n", err)
         return model.User{}
     }
 

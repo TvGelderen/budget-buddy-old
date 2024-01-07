@@ -8,6 +8,18 @@ function outsideClickListener(event, elementRect) {
     }
 }
 
+function toggleNav() {
+    const navBar = document.getElementById("nav-bar");
+    console.log(navBar);
+    if (!navBar) return;
+
+    if (!navBar.hasAttribute("open")) {
+        navBar.setAttribute("open", "");
+    } else {
+        navBar.removeAttribute("open");
+    }
+}
+
 let dropdownRect;
 const dropdownListener = event => outsideClickListener(event, dropdownRect);
 

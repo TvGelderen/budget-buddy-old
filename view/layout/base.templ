@@ -8,7 +8,7 @@ import (
 templ Base(user model.User) {
 	@Page() {
 		@components.Header(user)
-		<div class="w-[95%] max-w-[1400px] mx-auto my-4">
+		<div class="w-[calc(100%-1rem)] max-w-[1400px] mx-auto my-4">
 			{ children... }
 		</div>
 	}
