@@ -10,4 +10,5 @@ templ Dashboard(user model.User) {
     @layout.Base(user) {
         @components.AddTransaction()
     }
+    <div hx-get="/api/transactions" hx-trigger="load delay:0s"></div>
 }

@@ -1,7 +1,18 @@
 package components
 
 import "github.com/TvGelderen/budget-buddy/model"
+import "strconv"
 
 templ TransactionsTable(transactions []model.Transaction) {
     <div>Transaction table</div>
+    <div class="grid grid-cols-3">
+        <div class="">Amount</div>
+        <div class="">Date</div>
+        <div class="">Next date</div>
+        for _, transaction := range transactions {
+            <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
+            <div>{ transaction.Date }</div>
+            <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
+        }
+    </div>
 }
