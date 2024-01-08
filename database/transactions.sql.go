@@ -7,14 +7,15 @@ package database
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/google/uuid"
 )
 
 const createTransaction = `-- name: CreateTransaction :one
-INSERT INTO transactions (user_id, amount, incoming, recurring)
-VALUES ($1, $2, $3, $4)
-RETURNING id, user_id, amount, incoming, recurring
+INSERT INTO transactions (user_id, amount, incoming, recurring, start_date, end_date)
+VALUES ($1, $2, $3, $4, $5, $6)
+RETURNING id, user_id, amount, incoming, recurring, start_date, end_date
 `
 
 type CreateTransactionParams struct {
@@ -22,6 +23,8 @@ type CreateTransactionParams struct {
 	Amount    float64
 	Incoming  bool
 	Recurring string
+	StartDate sql.NullTime
+	EndDate   sql.NullTime
 }
 
 func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionParams) (Transaction, error) {
@@ -30,6 +33,8 @@ func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionPa
 		arg.Amount,
 		arg.Incoming,
 		arg.Recurring,
+		arg.StartDate,
+		arg.EndDate,
 	)
 	var i Transaction
 	err := row.Scan(
@@ -38,12 +43,14 @@ func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionPa
 		&i.Amount,
 		&i.Incoming,
 		&i.Recurring,
+		&i.StartDate,
+		&i.EndDate,
 	)
 	return i, err
 }
 
 const getIncomingTransactionslByUserId = `-- name: GetIncomingTransactionslByUserId :many
-SELECT id, user_id, amount, incoming, recurring FROM transactions WHERE user_id = $1 AND incoming = 1
+SELECT id, user_id, amount, incoming, recurring, start_date, end_date FROM transactions WHERE user_id = $1 AND incoming = 1
 `
 
 func (q *Queries) GetIncomingTransactionslByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
@@ -61,6 +68,8 @@ func (q *Queries) GetIncomingTransactionslByUserId(ctx context.Context, userID u
 			&i.Amount,
 			&i.Incoming,
 			&i.Recurring,
+			&i.StartDate,
+			&i.EndDate,
 		); err != nil {
 			return nil, err
 		}
@@ -76,7 +85,7 @@ func (q *Queries) GetIncomingTransactionslByUserId(ctx context.Context, userID u
 }
 
 const getOutgoingTransactionslByUserId = `-- name: GetOutgoingTransactionslByUserId :many
-SELECT id, user_id, amount, incoming, recurring FROM transactions WHERE user_id = $1 AND incoming = 0
+SELECT id, user_id, amount, incoming, recurring, start_date, end_date FROM transactions WHERE user_id = $1 AND incoming = 0
 `
 
 func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
@@ -94,6 +103,8 @@ func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID u
 			&i.Amount,
 			&i.Incoming,
 			&i.Recurring,
+			&i.StartDate,
+			&i.EndDate,
 		); err != nil {
 			return nil, err
 		}
@@ -109,7 +120,7 @@ func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID u
 }
 
 const getTransactionsByUserId = `-- name: GetTransactionsByUserId :many
-SELECT id, user_id, amount, incoming, recurring FROM transactions WHERE user_id = $1
+SELECT id, user_id, amount, incoming, recurring, start_date, end_date FROM transactions WHERE user_id = $1
 `
 
 func (q *Queries) GetTransactionsByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
@@ -127,6 +138,8 @@ func (q *Queries) GetTransactionsByUserId(ctx context.Context, userID uuid.UUID)
 			&i.Amount,
 			&i.Incoming,
 			&i.Recurring,
+			&i.StartDate,
+			&i.EndDate,
 		); err != nil {
 			return nil, err
 		}

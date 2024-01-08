@@ -5,6 +5,7 @@
 package database
 
 import (
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -16,6 +17,8 @@ type Transaction struct {
 	Amount    float64
 	Incoming  bool
 	Recurring string
+	StartDate sql.NullTime
+	EndDate   sql.NullTime
 }
 
 type User struct {

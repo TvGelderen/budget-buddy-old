@@ -14,8 +14,7 @@ CREATE TABLE transactions (
     amount DOUBLE PRECISION NOT NULL,
     incoming BOOLEAN NOT NULL,
     recurring TEXT NOT NULL,
-    date TIMESTAMP NOT NULL,
-    next_date TIMESTAMP,
+    start_date TIMESTAMP,
     end_date TIMESTAMP,
     CONSTRAINT fk_user_id
         FOREIGN KEY(user_id)
@@ -23,12 +22,9 @@ CREATE TABLE transactions (
         ON DELETE CASCADE
 );
 
-CREATE INDEX id_idx ON users(id);
-CREATE INDEX user_id ON transactions(user_id);
+CREATE INDEX idx_users_id ON users(id);
+CREATE INDEX idx_transactions_user_id ON transactions(user_id);
 
 -- +goose Down
 DROP TABLE transactions;
 DROP TABLE users;
-
-DROP INDEX id_idx ON users(id);
-DROP INDEX user_id ON transactions(user_id);

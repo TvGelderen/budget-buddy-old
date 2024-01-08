@@ -1,6 +1,6 @@
 -- name: CreateTransaction :one
-INSERT INTO transactions (user_id, amount, incoming, recurring)
-VALUES ($1, $2, $3, $4)
+INSERT INTO transactions (user_id, amount, incoming, recurring, start_date, end_date)
+VALUES ($1, $2, $3, $4, $5, $6)
 RETURNING *;
 
 -- name: GetTransactionsByUserId :many

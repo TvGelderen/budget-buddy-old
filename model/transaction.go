@@ -1,12 +1,15 @@
 package model
 
-import "time"
+import (
+	"database/sql"
+	"time"
+)
 
 type Transaction struct {
     Amount float64
     Incoming bool
     Recurring string
     Date time.Time
-    NextDate time.Time
-    EndDate time.Time
+    NextDate sql.NullTime
+    EndDate sql.NullTime
 }
