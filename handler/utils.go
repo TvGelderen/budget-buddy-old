@@ -28,9 +28,8 @@ func mapDbTransactionToTransaction(dbTransaction database.Transaction) model.Tra
         Amount: dbTransaction.Amount,
         Incoming: dbTransaction.Incoming,
         Recurring: dbTransaction.Recurring,
-        Date: dbTransaction.Date,
-        NextDate: dbTransaction.NextDate,
-        EndDate: dbTransaction.EndDate,
+        StartDate: dbTransaction.StartDate.Time,
+        EndDate: dbTransaction.EndDate.Time,
     }
 }
     
