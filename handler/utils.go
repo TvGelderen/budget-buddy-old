@@ -16,7 +16,7 @@ type ApiConfig struct {
 }
 
 func mapDbUserToUser(dbUser database.User) model.User {
-    return model.User {
+    return model.User{
         Id: dbUser.ID,
         Username: dbUser.Username,
         Email: dbUser.Email,
@@ -25,6 +25,7 @@ func mapDbUserToUser(dbUser database.User) model.User {
 
 func mapDbTransactionToTransaction(dbTransaction database.Transaction) model.Transaction {
     return model.Transaction{
+        Id: dbTransaction.ID,
         Amount: dbTransaction.Amount,
         Incoming: dbTransaction.Incoming,
         Recurring: dbTransaction.Recurring,

@@ -1,10 +1,12 @@
 package handler
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/model"
@@ -14,9 +16,11 @@ import (
 
 func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
     type parameters struct {
-        Amount string `json:"amount"`;
-        Incoming string `json:"incoming"`;
-        Recurring string `json:"recurring"`;
+        Amount string `json:"amount"`
+        Incoming string `json:"incoming"`
+        Recurring string `json:"recurring"`
+        StartDate string `json:"startdate"`
+        EndDate string `json:"enddate"`
     }
     
     user := apiCfg.GetUser(c.Request())
@@ -37,13 +41,25 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
         return c.HTML(http.StatusBadRequest, errorHTML("Invalid value for amount"))
     }
 
+    timeFormat := "2006-01-02"
+
     incoming := params.Recurring == "0"
+    startDate, startDateErr := time.Parse(timeFormat, params.StartDate)
+    endDate, endDateErr := time.Parse(timeFormat, params.EndDate)
 
     _, err = apiCfg.DB.CreateTransaction(c.Request().Context(), database.CreateTransactionParams{
         UserID: user.Id,
         Amount: amount,
         Incoming: incoming,
         Recurring: params.Recurring,
+        StartDate: sql.NullTime{
+            Time: startDate,
+            Valid: startDateErr == nil,
+        },
+        EndDate: sql.NullTime{
+            Time: endDate,
+            Valid: endDateErr == nil,
+        },
     })
     if err != nil {
         fmt.Printf("Error: %v\n", err)

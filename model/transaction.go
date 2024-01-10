@@ -5,6 +5,7 @@ import (
 )
 
 type Transaction struct {
+    Id int32
     Amount float64
     Incoming bool
     Recurring string
