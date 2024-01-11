@@ -57,3 +57,12 @@ function toggleModal(id) {
         modal.showModal();
     }
 }
+
+function closeModalOnSuccess(id, event) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    if (event.successful) {
+        modal.close();
+    }
+}

@@ -59,3 +59,15 @@ dialog {
 dialog::backdrop {
     @apply bg-primary/75;
 }
+
+.toast {
+    @apply bg-tertiary absolute w-[95%] sm:w-[280px] p-4 top-2 right-2 rounded-md border-l-[6px] z-10;
+}
+
+.toast.success {
+    @apply text-black bg-success-background border-l-success;
+}
+
+.toast.error {
+    @apply text-black bg-error-background border-l-error;
+}

@@ -15,7 +15,8 @@ templ AddTransaction() {
 				id="registerForm"
 				hx-post="api/transactions"
 				hx-target="#addTransactionResult"
-				hx-on="htmx:responseError: showError('addTransactionResult', event)"
+				hx-on:htmx:responseError=" showError('addTransactionResult', event)"
+				hx-on:htmx:afterRequest="showError('addTransactionResult', event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="amount">Amount:</label>
