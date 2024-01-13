@@ -1,14 +1,20 @@
 package pages
 
 import (
-    "github.com/TvGelderen/budget-buddy/view/layout"
-    "github.com/TvGelderen/budget-buddy/model"
+	"github.com/TvGelderen/budget-buddy/view/layout"
+	"github.com/TvGelderen/budget-buddy/model"
 	"github.com/TvGelderen/budget-buddy/view/components"
 )
 
 templ Dashboard(user model.User) {
-    @layout.Base(user) {
-        @components.AddTransaction()
-    }
-    <div hx-get="/api/transactions" hx-trigger="load delay:0s"></div>
+	@layout.Base(user) {
+		@components.AddTransaction()
+		<div class="w-full flex justify-between mt-4">
+			<p class="text-lg md:text-xl">Your transactions:</p>
+			<button class="button secondary">
+				<span class="material-symbols-outlined text-lg">refresh</span>
+			</button>
+		</div>
+		<div hx-get="/api/transactions" hx-trigger="load, click from:previous button"></div>
+	}
 }

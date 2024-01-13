@@ -1,8 +1,7 @@
 package components
 
 templ AddTransaction() {
-	<div class="w-full">
-		<button class="button secondary float-right flex items-center" onclick="toggleModal('add-transaction-modal')">
+		<button class="button secondary flex items-center float-right mb-4" onclick="toggleModal('add-transaction-modal')">
 			<span class="material-symbols-outlined text-md mr-2">add</span> Add transaction
 		</button>
 		<dialog id="add-transaction-modal" class="w-[480px]">
@@ -49,5 +48,4 @@ templ AddTransaction() {
 				</div>
 			</form>
 		</dialog>
-	</div>
 }

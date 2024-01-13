@@ -13,7 +13,6 @@ templ Register(user model.User) {
 				class="max-w-md mx-auto"
 				id="registerForm"
 				hx-post="api/register"
-				hx-on::response-error="showError('registerResult', event)"
 				hx-on::after-request="showToast(event)"
 			>
 				<div class="flex justify-between align-center my-4">
@@ -32,7 +31,6 @@ templ Register(user model.User) {
 					<button class="button" type="submit" hx-target="#registerResult">Register</button>
 				</div>
 			</form>
-			<div id="registerResult"></div>
 		</div>
 	}
 }

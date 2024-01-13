@@ -13,8 +13,7 @@ templ Login(user model.User) {
 				class="max-w-md mx-auto"
 				id="loginForm"
 				hx-post="api/login"
-				hx-on::response-error="showError('loginResult', event)"
-				hx-on::after-response="showToast(event)"
+				hx-on::after-request="showToast(event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="email">Email:</label>
@@ -29,7 +28,6 @@ templ Login(user model.User) {
 					<span class="text-sm text-red-600">Don't have an account? <a class="hover:text-theme" href="/register">Register</a> here.</span>
 				</div>
 			</form>
-			<div id="loginResult"></div>
 		</div>
 	}
 }

@@ -43,6 +43,8 @@ function showError(id, event) {
     if (!element) return;
 
     element.innerHTML = event.detail.xhr.response;
+    
+    console.log(element.firstChild)
 }
 
 function toggleModal(id) {

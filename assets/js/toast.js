@@ -1,8 +1,6 @@
 const activeToasts = [];
 
 function showToast(event, modalId = "") {
-    console.log(event);
-
     if (event.detail.successful && modalId != "") {
         const modal = document.getElementById(modalId);
         if (modal) {
