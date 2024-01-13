@@ -18,6 +18,7 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
     type parameters struct {
         Amount string `json:"amount"`
         Incoming string `json:"incoming"`
+        Description string `json:"description"`
         Recurring string `json:"recurring"`
         StartDate string `json:"startdate"`
         EndDate string `json:"enddate"`
@@ -43,7 +44,7 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 
     timeFormat := "2006-01-02"
 
-    incoming := params.Recurring == "0"
+    incoming := params.Incoming != "0"
     startDate, startDateErr := time.Parse(timeFormat, params.StartDate)
     endDate, endDateErr := time.Parse(timeFormat, params.EndDate)
 
@@ -51,6 +52,7 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
         UserID: user.Id,
         Amount: amount,
         Incoming: incoming,
+        Description: params.Description,
         Recurring: params.Recurring,
         StartDate: sql.NullTime{
             Time: startDate,

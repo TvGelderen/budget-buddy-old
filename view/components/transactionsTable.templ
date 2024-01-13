@@ -4,15 +4,20 @@ import "github.com/TvGelderen/budget-buddy/model"
 import "strconv"
 
 templ TransactionsTable(transactions []model.Transaction) {
-    <div class="grid grid-cols-3">
-        <div class="">Amount</div>
+    <div class="grid grid-cols-4">
         <div class="">Date</div>
-        <div class="">Next date</div>
+        <div class="">Description</div>
+        <div class="">Amount</div>
+        <div class="">Type</div>
         for _, transaction := range transactions {
-            <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
             <div>{ transaction.StartDate.Format("01-02-2006") }</div>
-            <div>{ transaction.EndDate.Format("01-02-2006") }</div>
+            <div>{ transaction.Description }</div>
+            <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
+            if transaction.Incoming {
+                <div>Income</div>
+            } else {
+                <div>Expense</div>
+            }
         }
     </div>
 }
-

@@ -12,13 +12,14 @@ import (
 )
 
 type Transaction struct {
-	ID        int32
-	UserID    uuid.UUID
-	Amount    float64
-	Incoming  bool
-	Recurring string
-	StartDate sql.NullTime
-	EndDate   sql.NullTime
+	ID          int32
+	UserID      uuid.UUID
+	Amount      float64
+	Incoming    bool
+	Description string
+	Recurring   string
+	StartDate   sql.NullTime
+	EndDate     sql.NullTime
 }
 
 type User struct {

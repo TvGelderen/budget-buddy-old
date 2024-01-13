@@ -13,6 +13,7 @@ CREATE TABLE transactions (
     user_id UUID NOT NULL,
     amount DOUBLE PRECISION NOT NULL,
     incoming BOOLEAN NOT NULL,
+    description TEXT NOT NULL,
     recurring TEXT NOT NULL,
     start_date TIMESTAMP,
     end_date TIMESTAMP,
