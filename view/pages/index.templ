@@ -8,5 +8,7 @@ import (
 templ Index(user model.User) {
     @layout.Base(user) {
         <h1>Welcome to BudgetBuddy</h1>
+        <button class="button" onclick="createToast('This is a success message!', true)">Success</button>
+        <button class="button" onclick="createToast('This is error message!', false)">Error</button>
     }
 }

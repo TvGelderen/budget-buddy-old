@@ -61,7 +61,8 @@ dialog::backdrop {
 }
 
 .toast {
-    @apply bg-tertiary absolute w-[95%] sm:w-[280px] p-4 top-2 right-2 rounded-md border-l-[6px] z-10;
+    @apply bg-tertiary absolute w-[95%] sm:w-[280px] p-4 top-2 right-2 rounded-md border-l-[6px] z-10 opacity-100;
+    transition: opacity 1s ease-in-out;
 }
 
 .toast.success {
