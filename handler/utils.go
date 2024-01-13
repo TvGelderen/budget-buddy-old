@@ -61,9 +61,9 @@ func render(c echo.Context, component templ.Component) error {
 }
 
 func errorHTML(text string) string {
-    return fmt.Sprintf("<p class='mt-4 text-error'>%s</p>", text)
+    return fmt.Sprintf("<p class='text-error'>%s</p>", text)
 }
 
 func successHTML(text string) string {
-    return fmt.Sprintf("<p class='mt-4 text-success'>%s</p>", text)
+    return fmt.Sprintf("<p class='text-success'>%s</p>", text)
 }

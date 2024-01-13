@@ -13,8 +13,8 @@ templ Login(user model.User) {
 				class="max-w-md mx-auto"
 				id="loginForm"
 				hx-post="api/login"
-				hx-target="#loginResult"
-				hx-on="htmx:responseError: showError('loginResult', event)"
+				hx-on::response-error="showError('loginResult', event)"
+				hx-on::after-response="showToast(event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="email">Email:</label>

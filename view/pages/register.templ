@@ -13,8 +13,8 @@ templ Register(user model.User) {
 				class="max-w-md mx-auto"
 				id="registerForm"
 				hx-post="api/register"
-				hx-target="#registerResult"
-				hx-on="htmx:responseError: showError('registerResult', event)"
+				hx-on::response-error="showError('registerResult', event)"
+				hx-on::after-request="showToast(event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="username">Username:</label>

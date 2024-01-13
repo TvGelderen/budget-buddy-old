@@ -3,16 +3,14 @@ const activeToasts = [];
 function showToast(event, modalId = "") {
     console.log(event);
 
-    if (event.success) {
-        if (modalId != "") {
-            const modal = document.getElementById(modalId);
-            if (!modal) return;
-
+    if (event.detail.successful && modalId != "") {
+        const modal = document.getElementById(modalId);
+        if (modal) {
             modal.close();
         }
-    } else {
-
     }
+
+    createToast(event.detail.xhr.response, event.detail.successful);
 }
 
 function createToast(message, success) {
@@ -26,7 +24,7 @@ function createToast(message, success) {
     } else {
         toast.classList.add("error");
     }
-    toast.innerText = message;
+    toast.innerHTML = message;
 
     if (activeToasts.length > 0) {
         const previousToastRect = activeToasts[activeToasts.length - 1].getBoundingClientRect();

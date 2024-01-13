@@ -14,9 +14,7 @@ templ AddTransaction() {
 				class="max-w-md mx-auto"
 				id="registerForm"
 				hx-post="api/transactions"
-				hx-target="#addTransactionResult"
-				hx-on:htmx:responseError=" showError('addTransactionResult', event)"
-				hx-on:htmx:afterRequest="showError('addTransactionResult', event)"
+				hx-on:htmx:after-request="showToast(event, 'add-transaction-modal')"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="amount">Amount:</label>
@@ -50,7 +48,6 @@ templ AddTransaction() {
 					<button class="button" type="submit">Add</button>
 				</div>
 			</form>
-            <div id="addTransactionResult"></div>
 		</dialog>
 	</div>
 }
