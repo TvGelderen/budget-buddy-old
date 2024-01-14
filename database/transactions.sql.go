@@ -52,12 +52,12 @@ func (q *Queries) CreateTransaction(ctx context.Context, arg CreateTransactionPa
 	return i, err
 }
 
-const getIncomingTransactionslByUserId = `-- name: GetIncomingTransactionslByUserId :many
+const getUserIncomingTransactions = `-- name: GetUserIncomingTransactions :many
 SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions WHERE user_id = $1 AND incoming = 1
 `
 
-func (q *Queries) GetIncomingTransactionslByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
-	rows, err := q.db.QueryContext(ctx, getIncomingTransactionslByUserId, userID)
+func (q *Queries) GetUserIncomingTransactions(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getUserIncomingTransactions, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -88,12 +88,12 @@ func (q *Queries) GetIncomingTransactionslByUserId(ctx context.Context, userID u
 	return items, nil
 }
 
-const getOutgoingTransactionslByUserId = `-- name: GetOutgoingTransactionslByUserId :many
+const getUserOutgoingTransactions = `-- name: GetUserOutgoingTransactions :many
 SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions WHERE user_id = $1 AND incoming = 0
 `
 
-func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
-	rows, err := q.db.QueryContext(ctx, getOutgoingTransactionslByUserId, userID)
+func (q *Queries) GetUserOutgoingTransactions(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getUserOutgoingTransactions, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -124,12 +124,55 @@ func (q *Queries) GetOutgoingTransactionslByUserId(ctx context.Context, userID u
 	return items, nil
 }
 
-const getTransactionsByUserId = `-- name: GetTransactionsByUserId :many
+const getUserTransactions = `-- name: GetUserTransactions :many
 SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions WHERE user_id = $1
 `
 
-func (q *Queries) GetTransactionsByUserId(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
-	rows, err := q.db.QueryContext(ctx, getTransactionsByUserId, userID)
+func (q *Queries) GetUserTransactions(ctx context.Context, userID uuid.UUID) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getUserTransactions, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []Transaction
+	for rows.Next() {
+		var i Transaction
+		if err := rows.Scan(
+			&i.ID,
+			&i.UserID,
+			&i.Amount,
+			&i.Incoming,
+			&i.Description,
+			&i.Recurring,
+			&i.StartDate,
+			&i.EndDate,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserTransactionsByMonth = `-- name: GetUserTransactionsByMonth :many
+SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions 
+WHERE user_id = $1 AND start_date <= $2 AND end_date >= $3
+`
+
+type GetUserTransactionsByMonthParams struct {
+	UserID    uuid.UUID
+	StartDate sql.NullTime
+	EndDate   sql.NullTime
+}
+
+func (q *Queries) GetUserTransactionsByMonth(ctx context.Context, arg GetUserTransactionsByMonthParams) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getUserTransactionsByMonth, arg.UserID, arg.StartDate, arg.EndDate)
 	if err != nil {
 		return nil, err
 	}

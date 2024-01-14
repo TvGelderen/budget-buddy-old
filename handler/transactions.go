@@ -77,7 +77,18 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
         return c.HTML(http.StatusBadRequest, errorHTML("You are not logged in."))
     }
 
-    dbTransactions, err := apiCfg.DB.GetTransactionsByUserId(c.Request().Context(), user.Id)
+    month := c.QueryParam("month")
+    date, err := time.Parse("2006-01-02", month)
+
+    fmt.Printf("%v\n", date)
+
+    dbTransactions, err := apiCfg.DB.GetUserTransactionsByMonth(c.Request().Context(), database.GetUserTransactionsByMonthParams{
+        UserID: user.Id,
+        StartDate: sql.NullTime{
+            Time: date,
+            Valid: err == nil,
+        },
+    })
     if err != nil {
         return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
     }

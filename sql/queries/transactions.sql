@@ -3,11 +3,15 @@ INSERT INTO transactions (user_id, amount, incoming, description, recurring, sta
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING *;
 
--- name: GetTransactionsByUserId :many
+-- name: GetUserTransactions :many
 SELECT * FROM transactions WHERE user_id = $1;
 
--- name: GetIncomingTransactionslByUserId :many
+-- name: GetUserIncomingTransactions :many
 SELECT * FROM transactions WHERE user_id = $1 AND incoming = 1;
 
--- name: GetOutgoingTransactionslByUserId :many
+-- name: GetUserOutgoingTransactions :many
 SELECT * FROM transactions WHERE user_id = $1 AND incoming = 0;
+
+-- name: GetUserTransactionsByMonth :many
+SELECT * FROM transactions 
+WHERE user_id = $1 AND start_date <= $2 AND end_date >= $3;
