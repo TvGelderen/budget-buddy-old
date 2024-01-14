@@ -4,7 +4,27 @@ import (
 	"github.com/TvGelderen/budget-buddy/view/layout"
 	"github.com/TvGelderen/budget-buddy/model"
 	"github.com/TvGelderen/budget-buddy/view/components"
+	"time"
 )
+
+func getMonths(year string) []time.Time {
+	start := year + "-01-01 00:00:00 +0000 UTC"
+	end := year + "-12-01 00:00:00 +0000 UTC"
+
+	inLayout := "2006-01-02 15:04:05 -0700 MST"
+	s, _ := time.Parse(inLayout, start)
+	e, _ := time.Parse(inLayout, end)
+
+	monthArray := []time.Time{}
+
+	for e.After(s) {
+		monthArray = append(monthArray, s)
+		s = s.AddDate(0, 1, 0)
+	}
+	monthArray = append(monthArray, s)
+
+	return monthArray
+}
 
 templ Dashboard(user model.User) {
 	@layout.Base(user) {
@@ -15,6 +35,16 @@ templ Dashboard(user model.User) {
 				<span class="material-symbols-outlined text-lg">refresh</span>
 			</button>
 		</div>
-		<div hx-get="/api/transactions" hx-trigger="load, click from:previous button"></div>
+		<div class="grid grid-cols-6">
+			<div class="col-span-1">
+				<p class="text-lg md:text-xl text-theme">2024</p>
+				<div class="ml-4 mt-2">
+					for _, month := range getMonths("2024") {
+						<div class="cursor-pointer hover:text-theme">{ month.Month().String() }</div>
+					}
+				</div>
+			</div>
+			<div class="col-span-5" hx-get="/api/transactions" hx-trigger="load, click from:previous button"></div>
+		</div>
 	}
 }

@@ -10,7 +10,7 @@ templ TransactionsTable(transactions []model.Transaction) {
         <div class="">Amount</div>
         <div class="">Type</div>
         for _, transaction := range transactions {
-            <div>{ transaction.StartDate.Format("01-02-2006") }</div>
+            <div>{ transaction.StartDate.Format("January 02, 2006") }</div>
             <div>{ transaction.Description }</div>
             <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
             if transaction.Incoming {
