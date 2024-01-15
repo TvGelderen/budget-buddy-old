@@ -37,7 +37,16 @@ func getCurrentMonth() time.Time {
 }
 
 script setDashboardMonth(month string) {
+    const prev = localStorage.getItem("dashboardMonth")
+    const prevSelected = document.getElementById(prev)
+    const selected = document.getElementById(month)
+
+    prevSelected.classList.remove("text-theme")
+    selected.classList.add("text-theme")
     localStorage.setItem("dashboardMonth", month)
+    
+    const setMonthEvent = new Event("dashboardMonthSet");
+    document.body.dispatchEvent(setMonthEvent);
 }
 
 templ Dashboard(user model.User) {
@@ -54,11 +63,11 @@ templ Dashboard(user model.User) {
 				<p class="text-lg md:text-xl text-theme">2024</p>
 				<div class="ml-4 mt-2">
 					for _, month := range getMonths("2024") {
-						<div class="cursor-pointer hover:text-theme" onclick={ setDashboardMonth(month.Format("2006-01-02")) }>{ month.Month().String() }</div>
+						<div id={ month.Format("2006-01-02") } class="cursor-pointer hover:text-theme" onclick={ setDashboardMonth(month.Format("2006-01-02")) }>{ month.Month().String() }</div>
 					}
 				</div>
 			</div>
-			<div class="col-span-5" hx-get="/api/transactions" hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }" hx-trigger="load, click from:previous button"></div>
+			<div class="col-span-5" hx-get="/api/transactions" hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }" hx-trigger="load, click from:previous button, dashboardMonthSet from:body"></div>
 		</div>
 	}
 }
