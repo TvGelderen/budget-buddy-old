@@ -1,16 +1,28 @@
 package components
 
-import "github.com/TvGelderen/budget-buddy/model"
-import "strconv"
+import (
+    "github.com/TvGelderen/budget-buddy/model"
+    "strconv"
+	"time"
+)
 
-templ TransactionsTable(transactions []model.Transaction) {
+func getTransactionDate(date time.Time, month time.Time) string {
+    transactionYear := (month.Year() - date.Year())
+    transactionMonth := (month.Month() - date.Month())
+
+    date = date.AddDate(transactionYear, int(transactionMonth), 0)
+
+    return date.Format("January 02, 2006")
+}
+
+templ TransactionsTable(transactions []model.Transaction, month time.Time) {
     <div class="grid grid-cols-4">
         <div class="">Date</div>
         <div class="">Description</div>
         <div class="">Amount</div>
         <div class="">Type</div>
         for _, transaction := range transactions {
-            <div>{ transaction.StartDate.Format("January 02, 2006") }</div>
+            <div>{ getTransactionDate(transaction.StartDate, month) }</div>
             <div>{ transaction.Description }</div>
             <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
             if transaction.Incoming {

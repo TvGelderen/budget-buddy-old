@@ -80,9 +80,6 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
     month := c.QueryParam("month")
     date, err := time.Parse("2006-01-02", month)
     
-
-    fmt.Printf("%v\n", date)
-
     dbTransactions, err := apiCfg.DB.GetUserTransactionsByMonth(c.Request().Context(), database.GetUserTransactionsByMonthParams{
         UserID: user.Id,
         StartDate: sql.NullTime{
@@ -104,5 +101,5 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
         transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i]))
     }
     
-    return render(c, components.TransactionsTable(transactions))
+    return render(c, components.TransactionsTable(transactions, date))
 }
