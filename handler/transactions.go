@@ -79,12 +79,17 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 
     month := c.QueryParam("month")
     date, err := time.Parse("2006-01-02", month)
+    
 
     fmt.Printf("%v\n", date)
 
     dbTransactions, err := apiCfg.DB.GetUserTransactionsByMonth(c.Request().Context(), database.GetUserTransactionsByMonthParams{
         UserID: user.Id,
         StartDate: sql.NullTime{
+            Time: date.AddDate(0, 1, 0),
+            Valid: err == nil,
+        },
+        EndDate: sql.NullTime{
             Time: date,
             Valid: err == nil,
         },

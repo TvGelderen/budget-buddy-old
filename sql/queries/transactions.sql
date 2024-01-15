@@ -14,4 +14,4 @@ SELECT * FROM transactions WHERE user_id = $1 AND incoming = 0;
 
 -- name: GetUserTransactionsByMonth :many
 SELECT * FROM transactions 
-WHERE user_id = $1 AND start_date <= $2 AND end_date >= $3;
+WHERE user_id = $1 AND start_date < $2 AND end_date >= $3;

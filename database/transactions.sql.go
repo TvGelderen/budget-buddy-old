@@ -162,7 +162,7 @@ func (q *Queries) GetUserTransactions(ctx context.Context, userID uuid.UUID) ([]
 
 const getUserTransactionsByMonth = `-- name: GetUserTransactionsByMonth :many
 SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions 
-WHERE user_id = $1 AND start_date <= $2 AND end_date >= $3
+WHERE user_id = $1 AND start_date < $2 AND end_date >= $3
 `
 
 type GetUserTransactionsByMonthParams struct {
