@@ -63,11 +63,31 @@ templ Dashboard(user model.User) {
 				<p class="text-lg md:text-xl text-theme">2024</p>
 				<div class="ml-4 mt-2">
 					for _, month := range getMonths("2024") {
-						<div id={ month.Format("2006-01-02") } class="cursor-pointer hover:text-theme" onclick={ setDashboardMonth(month.Format("2006-01-02")) }>{ month.Month().String() }</div>
+						<div 
+                            id={ month.Format("2006-01-02") } 
+                            class="cursor-pointer hover:text-theme" 
+                            onclick={ setDashboardMonth(month.Format("2006-01-02")) }
+                        >
+                            { month.Month().String() }
+                        </div>
 					}
 				</div>
 			</div>
-			<div class="col-span-5" hx-get="/api/transactions" hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }" hx-trigger="load, click from:previous button, dashboardMonthSet from:body"></div>
+			<div 
+                id="transactions-table" 
+                class="col-span-5" 
+                hx-get="/api/transactions"
+                hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }" 
+                hx-trigger="load, click from:previous button, dashboardMonthSet from:body"
+            ></div>
 		</div>
+        <script type="text/javascript">
+            window.addEventListener("load", () => {
+                const activeMonth = document.getElementById(localStorage.getItem('dashboardMonth'))
+                if (!activeMonth) return
+
+                activeMonth.classList.add("text-theme")
+            })
+        </script>
 	}
 }
