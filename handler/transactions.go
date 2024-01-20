@@ -106,6 +106,16 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
                 transactionDate.Time = transactionDate.Time.AddDate(0, 1, 0)
 			}
 		}
+        if dbTransactions[i].Recurring == "weekly" {
+            for transactionDate.Time.Before(date) {
+                transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+            }
+            for transactionDate.Time.Before(date.AddDate(0, 1, 0)) {
+                transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
+                transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+            }
+            break
+        }
 
 		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
 	}

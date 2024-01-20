@@ -10,7 +10,6 @@ function outsideClickListener(event, elementRect) {
 
 function toggleNav() {
     const navBar = document.getElementById("nav-bar");
-    console.log(navBar);
     if (!navBar) return;
 
     if (!navBar.hasAttribute("open")) {
@@ -43,15 +42,11 @@ function showError(id, event) {
     if (!element) return;
 
     element.innerHTML = event.detail.xhr.response;
-    
-    console.log(element.firstChild)
 }
 
 function toggleModal(id) {
     const modal = document.getElementById(id);
     if (!modal) return;
-
-    console.log(modal);
 
     if (modal.hasAttribute("open")) {
         modal.close();
