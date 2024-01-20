@@ -44,10 +44,18 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 	}
 
 	timeFormat := "2006-01-02"
-
 	incoming := params.Incoming != "0"
 	startDate, startDateErr := time.Parse(timeFormat, params.StartDate)
-	endDate, endDateErr := time.Parse(timeFormat, params.EndDate)
+
+    var endDate time.Time
+    var endDateErr error
+
+    if params.EndDate == "" {
+        endDate = startDate
+        endDateErr = startDateErr
+    } else {
+        endDate, endDateErr = time.Parse(timeFormat, params.EndDate)
+    }
 
 	_, err = apiCfg.DB.CreateTransaction(c.Request().Context(), database.CreateTransactionParams{
 		UserID:      user.Id,
@@ -110,11 +118,12 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
             for transactionDate.Time.Before(date) {
                 transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
             }
-            for transactionDate.Time.Before(date.AddDate(0, 1, 0)) {
+            for transactionDate.Time.Before(date.AddDate(0, 1, 0)) && 
+                transactionDate.Time.Before(dbTransactions[i].EndDate.Time) {
                 transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
                 transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
             }
-            break
+            continue
         }
 
 		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
