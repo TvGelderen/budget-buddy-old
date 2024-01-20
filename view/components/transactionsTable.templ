@@ -1,35 +1,26 @@
 package components
 
 import (
-    "github.com/TvGelderen/budget-buddy/model"
-    "strconv"
+	"github.com/TvGelderen/budget-buddy/model"
+	"strconv"
 	"time"
 )
 
-func getTransactionDate(date time.Time, month time.Time) string {
-    transactionYear := (month.Year() - date.Year())
-    transactionMonth := (month.Month() - date.Month())
-
-    date = date.AddDate(transactionYear, int(transactionMonth), 0)
-
-    return date.Format("January 02, 2006")
-}
-
 templ TransactionsTable(transactions []model.Transaction, month time.Time) {
-    <div class="grid grid-cols-4">
-        <div class="">Date</div>
-        <div class="">Description</div>
-        <div class="">Amount</div>
-        <div class="">Type</div>
-        for _, transaction := range transactions {
-            <div>{ getTransactionDate(transaction.StartDate, month) }</div>
-            <div>{ transaction.Description }</div>
-            <div>{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
-            if transaction.Incoming {
-                <div>Income</div>
-            } else {
-                <div>Expense</div>
-            }
-        }
-    </div>
+	<div class="table">
+		<div class="table-header table-item">Date</div>
+		<div class="table-header table-item">Description</div>
+		<div class="table-header table-item">Amount</div>
+		<div class="table-header table-item">Type</div>
+		for _, transaction := range transactions {
+			<div class="table-item">{ transaction.Date.Format("January 02, 2006") }</div>
+			<div class="table-item">{ transaction.Description }</div>
+			<div class="table-item">{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
+			if transaction.Incoming {
+				<div class="table-item">Income</div>
+			} else {
+				<div class="table-item">Expense</div>
+			}
+		}
+	</div>
 }

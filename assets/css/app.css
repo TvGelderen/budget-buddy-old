@@ -72,3 +72,15 @@ dialog::backdrop {
 .toast.error {
     @apply text-black bg-error-background border-l-error;
 }
+
+.table {
+    @apply grid grid-cols-4 border-[1px] border-white/25 rounded-xl;
+}
+
+.table-item {
+    @apply p-4 border-t-[1px] border-t-white/25;
+}
+
+.table-item.table-header {
+    @apply text-white/60 font-bold border-t-0;
+}

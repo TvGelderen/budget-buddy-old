@@ -12,4 +12,5 @@ type Transaction struct {
     Recurring string
     StartDate time.Time
     EndDate time.Time
+    Date time.Time
 }

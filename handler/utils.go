@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/model"
@@ -23,7 +24,7 @@ func mapDbUserToUser(dbUser database.User) model.User {
     }
 }
 
-func mapDbTransactionToTransaction(dbTransaction database.Transaction) model.Transaction {
+func mapDbTransactionToTransaction(dbTransaction database.Transaction, date time.Time) model.Transaction {
     return model.Transaction{
         Id: dbTransaction.ID,
         Amount: dbTransaction.Amount,
@@ -32,6 +33,7 @@ func mapDbTransactionToTransaction(dbTransaction database.Transaction) model.Tra
         Recurring: dbTransaction.Recurring,
         StartDate: dbTransaction.StartDate.Time,
         EndDate: dbTransaction.EndDate.Time,
+        Date: date,
     }
 }
     
