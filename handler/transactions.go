@@ -129,9 +129,20 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
 	}
 
+    var income float64
+    var expense float64
+
+    for i := 0; i < len(transactions); i++ {
+        if transactions[i].Incoming {
+            income += transactions[i].Amount
+        } else {
+            expense += transactions[i].Amount
+        }       
+    }
+
 	sort.Slice(transactions, func(i, j int) bool {
 		return transactions[i].Date.Before(transactions[j].Date)
 	})
 
-	return render(c, transaction.Table(transactions, date))
+	return render(c, transaction.Table(transactions, income, expense))
 }
