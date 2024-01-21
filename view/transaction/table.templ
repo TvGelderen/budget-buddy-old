@@ -3,21 +3,22 @@ package transaction
 import (
 	"github.com/TvGelderen/budget-buddy/model"
 	"strconv"
+	"fmt"
 )
 
 templ Table(transactions []model.Transaction, income float64, expense float64) {
     <div class="grid grid-cols-3 gap-4 mb-4">
-        <div class="p-8 border-[1px] border-white/25 rounded-xl">
-            <div class="text-lg md:text-xl text-white/50">Total income</div>
-            <div class="text-xl md:text-2xl">{ strconv.FormatFloat(income, 'f', -1, 64) }</div>
+        <div class="bg-secondary p-8 rounded-xl">
+            <div class="text-xl md:text-2xl font-black text-white/75">Total income</div>
+            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income, 'f', -1, 64) }</div>
         </div>
-        <div class="p-8 border-[1px] border-white/25 rounded-xl">
-            <div class="text-lg md:text-xl text-white/50">Total expense</div>
-            <div class="text-xl md:text-2xl">{ strconv.FormatFloat(expense, 'f', -1, 64) }</div>
+        <div class="bg-secondary p-8 rounded-xl">
+            <div class="text-xl md:text-2xl font-black text-white/75">Total expense</div>
+            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(expense, 'f', -1, 64) }</div>
         </div>
-        <div class="p-8 border-[1px] border-white/25 rounded-xl">
-            <div class="text-lg md:text-xl text-white/50">Net income</div>
-            <div class="text-xl md:text-2xl">{ strconv.FormatFloat(income - expense, 'f', -1, 64) }</div>
+        <div class="bg-secondary p-8 rounded-xl">
+            <div class="text-xl md:text-2xl font-black text-white/75">Net income</div>
+            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income - expense, 'f', -1, 64) }</div>
         </div>
     </div>
 	<div class="table">
@@ -28,7 +29,7 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 		for _, transaction := range transactions {
 			<div class="table-item">{ transaction.Date.Format("January 02, 2006") }</div>
 			<div class="table-item">{ transaction.Description }</div>
-            <div class="table-item">{ strconv.FormatFloat(transaction.Amount, 'f', -1, 64) }</div>
+            <div class="table-item">€{ fmt.Sprintf("%.2f", transaction.Amount) }</div>
 			if transaction.Incoming {
 				<div class="table-item">Income</div>
 			} else {

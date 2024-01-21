@@ -74,13 +74,13 @@ dialog::backdrop {
 }
 
 .table {
-    @apply grid grid-cols-4 border-[1px] border-white/25 rounded-xl;
+    @apply grid grid-cols-4 bg-secondary rounded-xl;
 }
 
 .table-item {
-    @apply p-4 border-t-[1px] border-t-white/25;
+    @apply p-4 border-t-[1px] border-t-white/10;
 }
 
 .table-item.table-header {
-    @apply text-white/60 font-bold border-t-0;
+    @apply text-white/60 font-black border-t-0;
 }
