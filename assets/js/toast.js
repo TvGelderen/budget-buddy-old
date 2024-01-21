@@ -5,6 +5,10 @@ function showToast(event, modalId = "") {
         const modal = document.getElementById(modalId);
         if (modal) {
             modal.close();
+            const form = modal.getElementsByTagName('form')[0];
+            if (form) {
+                form.reset();
+            }
         }
     }
 

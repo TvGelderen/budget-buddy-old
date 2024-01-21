@@ -1,6 +1,6 @@
-package components
+package transaction
 
-templ AddTransaction() {
+templ Add() {
 	<button class="button secondary flex items-center" onclick="toggleModal('add-transaction-modal')">
 		<span class="material-symbols-outlined text-md mr-2">add</span> Add transaction
 	</button>
@@ -11,7 +11,8 @@ templ AddTransaction() {
 		<p class="text-lg lg:text-xl">Add transaction</p>
 		<form
 			class="max-w-md mx-auto"
-			hx-post="api/transactions"
+			hx-put="api/transactions"
+            hx-target="#transactionResponse"
 			hx-on:htmx:after-request="showToast(event, 'add-transaction-modal')"
 		>
 			<div class="flex justify-between align-center my-4">
@@ -49,6 +50,7 @@ templ AddTransaction() {
 				<button class="button" type="submit">Add</button>
 			</div>
 		</form>
+        <div id="transactionResponse" class="hidden"></div>
 		<script>
             recurring = document.getElementById("recurring");
             startDateInput = document.getElementById("startdate");

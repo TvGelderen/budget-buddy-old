@@ -3,7 +3,7 @@ package pages
 import (
 	"github.com/TvGelderen/budget-buddy/view/layout"
 	"github.com/TvGelderen/budget-buddy/model"
-	"github.com/TvGelderen/budget-buddy/view/components"
+	"github.com/TvGelderen/budget-buddy/view/transaction"
 	"time"
 	"fmt"
 )
@@ -52,7 +52,7 @@ script setDashboardMonth(month string) {
 templ Dashboard(user model.User) {
 	@layout.Base(user) {
 		<div class="flex justify-end">
-            @components.AddTransaction()
+            @transaction.Add()
 			<button class="button secondary ml-4">
 				<span class="material-symbols-outlined text-lg">refresh</span>
 			</button>

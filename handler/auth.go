@@ -45,7 +45,7 @@ func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
         return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
     }
 
-    c.Response().Writer.Header().Set("Hx-Redirect", "/")
+    c.Response().Writer.Header().Set("Hx-Redirect", "/login")
 
     return nil
 }

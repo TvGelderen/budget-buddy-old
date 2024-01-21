@@ -11,7 +11,7 @@ import (
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/model"
-	"github.com/TvGelderen/budget-buddy/view/components"
+	"github.com/TvGelderen/budget-buddy/view/transaction"
 	"github.com/labstack/echo/v4"
 )
 
@@ -133,5 +133,5 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 		return transactions[i].Date.Before(transactions[j].Date)
 	})
 
-	return render(c, components.TransactionsTable(transactions, date))
+	return render(c, transaction.Table(transactions, date))
 }
