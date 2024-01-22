@@ -6,35 +6,49 @@ import (
 	"fmt"
 )
 
+script updateTransaction(id int32) {
+    // fetch transaction data
+    toggleModal('update-transaction-modal');
+}
+
 templ Table(transactions []model.Transaction, income float64, expense float64) {
-    <div class="grid grid-cols-3 gap-4 mb-4">
-        <div class="bg-secondary p-8 rounded-xl">
-            <div class="text-xl md:text-2xl font-black text-white/75">Total income</div>
-            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income, 'f', -1, 64) }</div>
-        </div>
-        <div class="bg-secondary p-8 rounded-xl">
-            <div class="text-xl md:text-2xl font-black text-white/75">Total expense</div>
-            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(expense, 'f', -1, 64) }</div>
-        </div>
-        <div class="bg-secondary p-8 rounded-xl">
-            <div class="text-xl md:text-2xl font-black text-white/75">Net income</div>
-            <div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income - expense, 'f', -1, 64) }</div>
-        </div>
-    </div>
+	<div class="grid grid-cols-3 gap-4 mb-4">
+		<div class="bg-secondary p-8 rounded-xl">
+			<div class="text-xl md:text-2xl font-black text-white/75">Total income</div>
+			<div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income, 'f', -1, 64) }</div>
+		</div>
+		<div class="bg-secondary p-8 rounded-xl">
+			<div class="text-xl md:text-2xl font-black text-white/75">Total expense</div>
+			<div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(expense, 'f', -1, 64) }</div>
+		</div>
+		<div class="bg-secondary p-8 rounded-xl">
+			<div class="text-xl md:text-2xl font-black text-white/75">Net income</div>
+			<div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income - expense, 'f', -1, 64) }</div>
+		</div>
+	</div>
 	<div class="table">
 		<div class="table-header table-item">Date</div>
 		<div class="table-header table-item">Description</div>
 		<div class="table-header table-item">Amount</div>
 		<div class="table-header table-item">Type</div>
+		<div class="table-header table-item"></div>
 		for _, transaction := range transactions {
 			<div class="table-item">{ transaction.Date.Format("January 02, 2006") }</div>
 			<div class="table-item">{ transaction.Description }</div>
-            <div class="table-item">€{ fmt.Sprintf("%.2f", transaction.Amount) }</div>
-			if transaction.Incoming {
-				<div class="table-item">Income</div>
-			} else {
-				<div class="table-item">Expense</div>
-			}
+			<div class="table-item">€{ fmt.Sprintf("%.2f", transaction.Amount) }</div>
+			<div class="table-item">
+				if transaction.Incoming {
+					Income
+				} else {
+					Expense
+				}
+			</div>
+			<div class="table-item">
+				<span class="material-symbols-outlined cursor-pointer" onclick={ updateTransaction(transaction.Id) }>
+					edit
+				</span>
+			</div>
 		}
 	</div>
+    @Form("update-transaction-modal", "PUT", "Update transaction")
 }

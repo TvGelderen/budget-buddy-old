@@ -1,0 +1,84 @@
+package transaction
+
+script toggleModal(id string) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    if (modal.hasAttribute("open")) {
+        modal.close();
+    } else {
+        modal.showModal();
+    }
+}
+
+templ Form(id string, method string, title string) {
+	<dialog id={ id } class="w-[480px]">
+		<button class="absolute top-2 right-2" onclick={ toggleModal(id) }>
+			<span class="material-symbols-outlined text-xl lg:text-2xl">close</span>
+		</button>
+		<p class="text-lg lg:text-xl">{ title }</p>
+		<form
+			class="max-w-md mx-auto"
+			if method == "POST" {
+                hx-post="api/transactions"
+            } else {
+                hx-put="api/transactions"
+            }
+            hx-target="#transactionResponse"
+			hx-on:htmx:after-request="showToast(event)"
+		>
+			<div class="flex justify-between align-center my-4">
+				<label for="amount">Amount:</label>
+				<input class="input" type="number" step="0.01" id="amount" name="amount" required />
+			</div>
+			<div class="flex justify-between align-center my-4">
+				<label for="incoming">Type:</label>
+				<select class="input" id="incoming" name="incoming">
+					<option value="1">Income</option>
+					<option value="0">Expense</option>
+				</select>
+			</div>
+			<div class="flex justify-between align-center my-4">
+				<label for="description">Description:</label>
+				<input class="input" type="text" id="description" name="description" required />
+			</div>
+			<div class="flex justify-between my-4">
+				<label for="recurring">Recurring:</label>
+				<select class="input" id="recurring" name="recurring">
+					<option value="no">No</option>
+					<option value="weekly">Weekly</option>
+					<option value="monthly">Monthly</option>
+				</select>
+			</div>
+			<div class="flex justify-between my-4">
+				<label for="startdate">Date</label>
+				<input class="input" type="date" id="startdate" name="startdate" />
+			</div>
+			<div class="flex justify-between my-4" style="display: none">
+				<label for="enddate">End date</label>
+				<input class="input" type="date" id="enddate" name="enddate" />
+			</div>
+			<div>
+				<button class="button" type="submit">Add</button>
+			</div>
+		</form>
+        <div id="transactionResponse" class="hidden"></div>
+		<script>
+            recurring = document.getElementById("recurring");
+            startDateInput = document.getElementById("startdate");
+            endDateInput = document.getElementById("enddate");
+
+            if (recurring && startDateInput && endDateInput) {
+                recurring.addEventListener('change', event => {
+                    if (recurring.value === "no") {
+                        startDateInput.labels[0].innerText = "Date";
+                        endDateInput.parentElement.style.display = "none";
+                    } else {
+                        startDateInput.labels[0].innerText = "Start date";
+                        endDateInput.parentElement.style.display = "flex";
+                    }
+                });
+            }
+        </script>
+	</dialog>
+}

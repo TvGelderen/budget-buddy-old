@@ -1,8 +1,8 @@
 const activeToasts = [];
 
-function showToast(event, modalId = "") {
-    if (event.detail.successful && modalId != "") {
-        const modal = document.getElementById(modalId);
+function showToast(event) {
+    if (event.detail.successful && event.target.parentElement.tagName == "DIALOG") {
+        const modal = event.target.parentElement;
         if (modal) {
             modal.close();
             const form = modal.getElementsByTagName('form')[0];

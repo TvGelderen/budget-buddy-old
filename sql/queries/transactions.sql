@@ -3,6 +3,9 @@ INSERT INTO transactions (user_id, amount, incoming, description, recurring, sta
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING *;
 
+-- name: GetTransaction :one
+SELECT * FROM transactions WHERE id = $1;
+
 -- name: GetUserTransactions :many
 SELECT * FROM transactions WHERE user_id = $1;
 

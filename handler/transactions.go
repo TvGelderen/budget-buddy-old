@@ -47,15 +47,15 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 	incoming := params.Incoming != "0"
 	startDate, startDateErr := time.Parse(timeFormat, params.StartDate)
 
-    var endDate time.Time
-    var endDateErr error
+	var endDate time.Time
+	var endDateErr error
 
-    if params.EndDate == "" {
-        endDate = startDate
-        endDateErr = startDateErr
-    } else {
-        endDate, endDateErr = time.Parse(timeFormat, params.EndDate)
-    }
+	if params.EndDate == "" {
+		endDate = startDate
+		endDateErr = startDateErr
+	} else {
+		endDate, endDateErr = time.Parse(timeFormat, params.EndDate)
+	}
 
 	_, err = apiCfg.DB.CreateTransaction(c.Request().Context(), database.CreateTransactionParams{
 		UserID:      user.Id,
@@ -78,6 +78,11 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 	}
 
 	return c.HTML(http.StatusOK, successHTML("Transaction added successfully."))
+}
+
+func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
+    fmt.Print("UpdateTransactions")
+	return nil
 }
 
 func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
@@ -111,38 +116,54 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 
 		if dbTransactions[i].Recurring == "monthly" {
 			for transactionDate.Time.Before(date) {
-                transactionDate.Time = transactionDate.Time.AddDate(0, 1, 0)
+				transactionDate.Time = transactionDate.Time.AddDate(0, 1, 0)
 			}
 		}
-        if dbTransactions[i].Recurring == "weekly" {
-            for transactionDate.Time.Before(date) {
-                transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
-            }
-            for transactionDate.Time.Before(date.AddDate(0, 1, 0)) && 
-                transactionDate.Time.Before(dbTransactions[i].EndDate.Time) {
-                transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
-                transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
-            }
-            continue
-        }
+		if dbTransactions[i].Recurring == "weekly" {
+			for transactionDate.Time.Before(date) {
+				transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+			}
+			for transactionDate.Time.Before(date.AddDate(0, 1, 0)) &&
+				transactionDate.Time.Before(dbTransactions[i].EndDate.Time) {
+				transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
+				transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+			}
+			continue
+		}
 
 		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
 	}
 
-    var income float64
-    var expense float64
+	var income float64
+	var expense float64
 
-    for i := 0; i < len(transactions); i++ {
-        if transactions[i].Incoming {
-            income += transactions[i].Amount
-        } else {
-            expense += transactions[i].Amount
-        }       
-    }
+	for i := 0; i < len(transactions); i++ {
+		if transactions[i].Incoming {
+			income += transactions[i].Amount
+		} else {
+			expense += transactions[i].Amount
+		}
+	}
 
 	sort.Slice(transactions, func(i, j int) bool {
 		return transactions[i].Date.Before(transactions[j].Date)
 	})
 
 	return render(c, transaction.Table(transactions, income, expense))
+}
+
+func (apiCfg *ApiConfig) HandleGetTransaction(c echo.Context) error {
+    idString := c.Param("id")
+
+    id, err := strconv.ParseInt(idString, 10, 32)
+    if err != nil {
+        return err
+    }
+
+    transaction, err := apiCfg.DB.GetTransaction(c.Request().Context(), int32(id))
+    if err != nil {
+        return err
+    }
+
+    return c.JSON(http.StatusOK, transaction)
 }

@@ -74,7 +74,7 @@ dialog::backdrop {
 }
 
 .table {
-    @apply grid grid-cols-4 bg-secondary rounded-xl;
+    @apply grid grid-cols-[repeat(4,_1fr)_60px] bg-secondary rounded-xl;
 }
 
 .table-item {
