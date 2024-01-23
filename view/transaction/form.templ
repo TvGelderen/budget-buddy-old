@@ -1,29 +1,14 @@
 package transaction
 
-script toggleModal(id string) {
-    const modal = document.getElementById(id);
-    if (!modal) return;
-
-    if (modal.hasAttribute("open")) {
-        modal.close();
-    } else {
-        modal.showModal();
-    }
-}
-
-templ Form(id string, method string, title string) {
-	<dialog id={ id } class="w-[480px]">
-		<button class="absolute top-2 right-2" onclick={ toggleModal(id) }>
+templ Form() {
+	<dialog id="transaction-form-modal" class="w-[480px]">
+		<button class="absolute top-2 right-2" onclick="toggleModal('transaction-form-modal')">
 			<span class="material-symbols-outlined text-xl lg:text-2xl">close</span>
 		</button>
-		<p class="text-lg lg:text-xl">{ title }</p>
+		<p class="text-lg lg:text-xl">Add transaction</p>
 		<form
 			class="max-w-md mx-auto"
-			if method == "POST" {
-                hx-post="api/transactions"
-            } else {
-                hx-put="api/transactions"
-            }
+            hx-post="api/transactions"
             hx-target="#transactionResponse"
 			hx-on:htmx:after-request="showToast(event)"
 		>
@@ -64,9 +49,9 @@ templ Form(id string, method string, title string) {
 		</form>
         <div id="transactionResponse" class="hidden"></div>
 		<script>
-            recurring = document.getElementById("recurring");
-            startDateInput = document.getElementById("startdate");
-            endDateInput = document.getElementById("enddate");
+            const recurring = document.getElementById("recurring");
+            const startDateInput = document.getElementById("startdate");
+            const endDateInput = document.getElementById("enddate");
 
             if (recurring && startDateInput && endDateInput) {
                 recurring.addEventListener('change', event => {

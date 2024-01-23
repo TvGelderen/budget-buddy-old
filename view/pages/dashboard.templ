@@ -80,6 +80,7 @@ templ Dashboard(user model.User) {
                 hx-trigger="load, click from:previous button, dashboardMonthSet from:body"
             ></div>
 		</div>
+        @transaction.Form()
         <script type="text/javascript">
             window.addEventListener("load", () => {
                 const activeMonth = document.getElementById(localStorage.getItem('dashboardMonth'))

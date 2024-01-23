@@ -6,9 +6,27 @@ import (
 	"fmt"
 )
 
-script updateTransaction(id int32) {
-    // fetch transaction data
-    toggleModal('update-transaction-modal');
+script updateTransaction(transaction model.Transaction, startDateValue string, endDateValue string) {
+    toggleModal('transaction-form-modal');
+
+    const form = document.getElementById('transaction-form-modal').querySelector('form');
+    const amount = form.querySelector('#amount');
+    const type = form.querySelector('#incoming');
+    const description = form.querySelector('#description');
+    const recurring = form.querySelector('#recurring');
+    const startDate = form.querySelector('#startdate');
+    const endDate = form.querySelector('#enddate');
+
+    amount.value = transaction.Amount;
+    if (transaction.Incoming) {
+        type.value = 1;
+    } else {
+        type.value = 0;
+    }
+    description.value = transaction.Description;
+    recurring.value = transaction.Recurring;
+    startDate.value = startDateValue;
+    endDate.value = endDateValue;
 }
 
 templ Table(transactions []model.Transaction, income float64, expense float64) {
@@ -44,11 +62,13 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 				}
 			</div>
 			<div class="table-item">
-				<span class="material-symbols-outlined cursor-pointer" onclick={ updateTransaction(transaction.Id) }>
+				<span 
+                    class="material-symbols-outlined cursor-pointer" 
+                    onclick={ updateTransaction(transaction, transaction.StartDate.Format("2006-01-02"), transaction.EndDate.Format("2006-01-02")) }
+                >
 					edit
 				</span>
 			</div>
 		}
 	</div>
-    @Form("update-transaction-modal", "PUT", "Update transaction")
 }
