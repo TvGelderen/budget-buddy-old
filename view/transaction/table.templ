@@ -27,6 +27,14 @@ script updateTransaction(transaction model.Transaction, startDateValue string, e
     recurring.value = transaction.Recurring;
     startDate.value = startDateValue;
     endDate.value = endDateValue;
+
+    if (transaction.Recurring === "no") {
+        startDateInput.labels[0].innerText = "Date";
+        endDateInput.parentElement.style.display = "none";
+    } else {
+        startDateInput.labels[0].innerText = "Start date";
+        endDateInput.parentElement.style.display = "flex";
+    }
 }
 
 templ Table(transactions []model.Transaction, income float64, expense float64) {
@@ -62,10 +70,10 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 				}
 			</div>
 			<div class="table-item">
-				<span 
-                    class="material-symbols-outlined cursor-pointer" 
-                    onclick={ updateTransaction(transaction, transaction.StartDate.Format("2006-01-02"), transaction.EndDate.Format("2006-01-02")) }
-                >
+				<span
+					class="material-symbols-outlined cursor-pointer"
+					onclick={ updateTransaction(transaction, transaction.StartDate.Format("2006-01-02"), transaction.EndDate.Format("2006-01-02")) }
+				>
 					edit
 				</span>
 			</div>
