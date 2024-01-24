@@ -3,6 +3,15 @@ INSERT INTO transactions (user_id, amount, incoming, description, recurring, sta
 VALUES ($1, $2, $3, $4, $5, $6, $7)
 RETURNING *;
 
+-- name: UpdateTransaction :exec
+UPDATE transactions
+SET amount = $3, incoming = $4, description = $5, recurring = $6, start_date = $7, end_date = $8
+WHERE id = $1 AND user_id = $2;
+
+-- name: RemoveTransaction :exec
+DELETE FROM transactions
+WHERE id = $1 AND user_id = $2;
+
 -- name: GetTransaction :one
 SELECT * FROM transactions WHERE id = $1;
 

@@ -222,3 +222,49 @@ func (q *Queries) GetUserTransactionsByMonth(ctx context.Context, arg GetUserTra
 	}
 	return items, nil
 }
+
+const removeTransaction = `-- name: RemoveTransaction :exec
+DELETE FROM transactions
+WHERE id = $1 AND user_id = $2
+`
+
+type RemoveTransactionParams struct {
+	ID     int32
+	UserID uuid.UUID
+}
+
+func (q *Queries) RemoveTransaction(ctx context.Context, arg RemoveTransactionParams) error {
+	_, err := q.db.ExecContext(ctx, removeTransaction, arg.ID, arg.UserID)
+	return err
+}
+
+const updateTransaction = `-- name: UpdateTransaction :exec
+UPDATE transactions
+SET amount = $3, incoming = $4, description = $5, recurring = $6, start_date = $7, end_date = $8
+WHERE id = $1 AND user_id = $2
+`
+
+type UpdateTransactionParams struct {
+	ID          int32
+	UserID      uuid.UUID
+	Amount      float64
+	Incoming    bool
+	Description string
+	Recurring   string
+	StartDate   sql.NullTime
+	EndDate     sql.NullTime
+}
+
+func (q *Queries) UpdateTransaction(ctx context.Context, arg UpdateTransactionParams) error {
+	_, err := q.db.ExecContext(ctx, updateTransaction,
+		arg.ID,
+		arg.UserID,
+		arg.Amount,
+		arg.Incoming,
+		arg.Description,
+		arg.Recurring,
+		arg.StartDate,
+		arg.EndDate,
+	)
+	return err
+}
