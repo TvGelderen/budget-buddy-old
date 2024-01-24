@@ -17,6 +17,11 @@ script updateTransaction(transaction model.Transaction, startDateValue string, e
     const startDate = form.querySelector('#startdate');
     const endDate = form.querySelector('#enddate');
 
+    form.removeAttribute('hx-post');
+    form.setAttribute('hx-put', 'api/transactions');
+
+    console.log(form);
+
     amount.value = transaction.Amount;
     if (transaction.Incoming) {
         type.value = 1;
