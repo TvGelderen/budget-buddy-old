@@ -23,13 +23,13 @@ func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
     err := json.NewDecoder(c.Request().Body).Decode(&params)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+        return c.HTML(http.StatusBadRequest, "Something went wrong.")
     }
 
     passwordHash, err := utils.HashPassword(params.Password)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+        return c.HTML(http.StatusBadRequest, "Something went wrong.")
     }
 
     _, err = apiCfg.DB.CreateUser(c.Request().Context(), database.CreateUserParams{
@@ -42,7 +42,7 @@ func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
     })
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
+        return c.HTML(http.StatusInternalServerError, "Something went wrong.")
     }
 
     c.Response().Writer.Header().Set("Hx-Redirect", "/login")
@@ -60,25 +60,25 @@ func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
     err := json.NewDecoder(c.Request().Body).Decode(&params)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+        return c.HTML(http.StatusBadRequest, "Something went wrong.")
     }
 
     user, err := apiCfg.DB.GetUserByEmail(c.Request().Context(), params.Email)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
+        return c.HTML(http.StatusUnauthorized, "Wrong email or password.")
     }
 
     validPassword := utils.CheckPasswordWithHash(params.Password, user.PasswordHash)
     if !validPassword {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
+        return c.HTML(http.StatusUnauthorized, "Wrong email or password.")
     }
 
     token, err := utils.CreateNewJWT(user.ID, user.Username)
     if err != nil {
         fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, errorHTML("Something went wrong."))
+        return c.HTML(http.StatusInternalServerError, "Something went wrong.")
     }
 
     utils.SetToken(c.Response().Writer, token)

@@ -25,22 +25,22 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 		EndDate     string `json:"enddate"`
 	}
 
-	user := apiCfg.GetUser(c.Request())
-	if user.Username == "" {
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+	user, err := apiCfg.GetUser(c.Request())
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
 	params := parameters{}
-	err := json.NewDecoder(c.Request().Body).Decode(&params)
+	err = json.NewDecoder(c.Request().Body).Decode(&params)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
 	amount, err := strconv.ParseFloat(params.Amount, 64)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Invalid value for amount"))
+		return c.HTML(http.StatusBadRequest, "Invalid value for amount")
 	}
 
 	timeFormat := "2006-01-02"
@@ -74,10 +74,10 @@ func (apiCfg *ApiConfig) HandleCreateTransaction(c echo.Context) error {
 	})
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
-	return c.HTML(http.StatusOK, successHTML("Transaction added successfully."))
+	return c.HTML(http.StatusOK, "Transaction added successfully.")
 }
 
 func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
@@ -91,22 +91,22 @@ func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
 		EndDate     string `json:"enddate"`
 	}
 
-	user := apiCfg.GetUser(c.Request())
-	if user.Username == "" {
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+    user, err := apiCfg.GetUser(c.Request())
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
 	params := parameters{}
-	err := json.NewDecoder(c.Request().Body).Decode(&params)
+	err = json.NewDecoder(c.Request().Body).Decode(&params)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
 	amount, err := strconv.ParseFloat(params.Amount, 64)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Invalid value for amount"))
+		return c.HTML(http.StatusBadRequest, "Invalid value for amount")
 	}
 
 	timeFormat := "2006-01-02"
@@ -126,7 +126,7 @@ func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
 	id, err := strconv.ParseInt(params.Id, 10, 32)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Invalid value for id"))
+		return c.HTML(http.StatusBadRequest, "Invalid value for id")
 	}
 
 	err = apiCfg.DB.UpdateTransaction(c.Request().Context(), database.UpdateTransactionParams{
@@ -147,16 +147,16 @@ func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
 	})
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
-	return c.HTML(http.StatusOK, successHTML("Transaction updated successfully."))
+	return c.HTML(http.StatusOK, "Transaction updated successfully.")
 }
 
 func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
-	user := apiCfg.GetUser(c.Request())
-	if user.Username == "" {
-		return c.HTML(http.StatusBadRequest, errorHTML("You are not logged in."))
+	user, err := apiCfg.GetUser(c.Request())
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, "You are not logged in.")
 	}
 
 	month := c.QueryParam("month")
@@ -174,7 +174,7 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 		},
 	})
 	if err != nil {
-		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
 	var transactions []model.Transaction

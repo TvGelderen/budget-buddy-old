@@ -9,6 +9,7 @@ import (
 
 	"github.com/TvGelderen/budget-buddy/database"
 	"github.com/TvGelderen/budget-buddy/handler"
+	"github.com/TvGelderen/budget-buddy/middleware"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
@@ -44,7 +45,7 @@ func main() {
 	app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
 
 	app.GET("/", apiCfg.HandleHomePage)
-	app.GET("/dashboard", apiCfg.HandleDashboardPage)
+	app.GET("/dashboard", middleware.Authorize(apiCfg.HandleDashboardPage))
 
 	app.GET("/login", apiCfg.HandleLoginPage)
 	app.GET("/logout", apiCfg.HandleLogout)

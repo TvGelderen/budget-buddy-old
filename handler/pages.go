@@ -6,33 +6,31 @@ import (
 )
 
 func (apiCfg *ApiConfig) HandleHomePage(c echo.Context) error {
-    userDto := apiCfg.GetUser(c.Request())
+    user, _ := apiCfg.GetUser(c.Request())
 
-    return render(c, pages.Index(userDto)); 
+    return render(c, pages.Index(user)); 
 }
 
 func (apiCfg *ApiConfig) HandleDashboardPage(c echo.Context) error {
-    userDto := apiCfg.GetUser(c.Request())
+    user, _ := apiCfg.GetUser(c.Request())
 
-    return render(c, pages.Dashboard(userDto)); 
+    return render(c, pages.Dashboard(user)); 
 }
 
 func (apiCfg *ApiConfig) HandleRegisterPage(c echo.Context) error {
-    userDto := apiCfg.GetUser(c.Request())
-    
-    if userDto.Username != "" {
+    user, err := apiCfg.GetUser(c.Request())
+    if err != nil {
         return c.Redirect(302, "/")
     }
 
-    return render(c, pages.Register(userDto));
+    return render(c, pages.Register(user));
 }
 
 func (apiCfg *ApiConfig) HandleLoginPage(c echo.Context) error {
-    userDto := apiCfg.GetUser(c.Request())
-
-    if userDto.Username != "" {
+    user, err := apiCfg.GetUser(c.Request())
+    if err == nil {
         return c.Redirect(302, "/")
     }
 
-    return render(c, pages.Login(userDto));
+    return render(c, pages.Login(user));
 }

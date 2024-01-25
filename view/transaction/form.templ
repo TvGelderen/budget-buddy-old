@@ -51,7 +51,7 @@ templ Form(id string, method string) {
 				hx-post="api/transactions"
 			} else {
 				hx-put="api/transactions"
-                hx-vals='js:{ id: getUpdateTransactionId() }'
+				hx-vals="js:{ id: getUpdateTransactionId() }"
 			}
 			hx-target="#transactionResponse"
 			hx-on:htmx:after-request="showToast(event)"
@@ -85,7 +85,7 @@ templ Form(id string, method string) {
 			</div>
 			<div class="flex justify-between my-4" style="display: none">
 				<label for={ getUniqueId(method, "enddate") }>End date</label>
-				<input class="input" type="date" id={ getUniqueId(method, "enddate") } name="enddate" />
+				<input class="input" type="date" id={ getUniqueId(method, "enddate") } name="enddate"/>
 			</div>
 			<div>
 				<button class="button" type="submit">
