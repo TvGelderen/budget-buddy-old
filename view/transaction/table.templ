@@ -7,20 +7,15 @@ import (
 )
 
 script updateTransaction(transaction model.Transaction, startDateValue string, endDateValue string) {
-    toggleModal('transaction-form-modal');
+    toggleModal('update-transaction-modal');
 
-    const form = document.getElementById('transaction-form-modal').querySelector('form');
-    const amount = form.querySelector('#amount');
-    const type = form.querySelector('#incoming');
-    const description = form.querySelector('#description');
-    const recurring = form.querySelector('#recurring');
-    const startDate = form.querySelector('#startdate');
-    const endDate = form.querySelector('#enddate');
-
-    form.removeAttribute('hx-post');
-    form.setAttribute('hx-put', 'api/transactions');
-
-    console.log(form);
+    const form = document.getElementById('update-transaction-modal').querySelector('form');
+    const amount = form.querySelector('#put-amount');
+    const type = form.querySelector('#put-incoming');
+    const description = form.querySelector('#put-description');
+    const recurring = form.querySelector('#put-recurring');
+    const startDate = form.querySelector('#put-startdate');
+    const endDate = form.querySelector('#put-enddate');
 
     amount.value = transaction.Amount;
     if (transaction.Incoming) {
@@ -34,11 +29,11 @@ script updateTransaction(transaction model.Transaction, startDateValue string, e
     endDate.value = endDateValue;
 
     if (transaction.Recurring === "no") {
-        startDateInput.labels[0].innerText = "Date";
-        endDateInput.parentElement.style.display = "none";
+        startDate.labels[0].innerText = "Date";
+        endDate.parentElement.style.display = "none";
     } else {
-        startDateInput.labels[0].innerText = "Start date";
-        endDateInput.parentElement.style.display = "flex";
+        startDate.labels[0].innerText = "Start date";
+        endDate.parentElement.style.display = "flex";
     }
 }
 
@@ -84,4 +79,5 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 			</div>
 		}
 	</div>
+    @Form("update-transaction-modal", "put")
 }

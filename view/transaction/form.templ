@@ -1,69 +1,102 @@
 package transaction
 
-templ Form() {
-	<dialog id="transaction-form-modal" class="w-[480px]">
-		<button class="absolute top-2 right-2" onclick="toggleModal('transaction-form-modal')">
+script toggleModal(id string) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    if (modal.hasAttribute("open")) {
+        modal.close();
+    } else {
+        modal.showModal();
+    }
+}
+
+script initializeForm(id string, method string) {
+    const recurring = document.getElementById(`${method}-recurring`);
+    const startDateInput = document.getElementById(`${method}-startdate`);
+    const endDateInput = document.getElementById(`${method}-enddate`);
+
+    if (recurring && startDateInput && endDateInput) {
+        recurring.addEventListener('change', event => {
+            if (recurring.value === "no") {
+                startDateInput.labels[0].innerText = "Date";
+                endDateInput.parentElement.style.display = "none";
+            } else {
+                startDateInput.labels[0].innerText = "Start date";
+                endDateInput.parentElement.style.display = "flex";
+            }
+        });
+    }
+}
+
+func getUniqueId(method string, id string) string {
+	return method + "-" + id
+}
+
+templ Form(id string, method string) {
+	<dialog id={ id } class="w-[480px]">
+		<button class="absolute top-2 right-2" onclick={ toggleModal(id) }>
 			<span class="material-symbols-outlined text-xl lg:text-2xl">close</span>
 		</button>
-		<p class="text-lg lg:text-xl">Add transaction</p>
+		<p class="text-lg lg:text-xl">
+			if method == "post" {
+				Add transaction
+			} else {
+				Update transaction
+			}
+		</p>
 		<form
 			class="max-w-md mx-auto"
-            hx-post="api/transactions"
-            hx-target="#transactionResponse"
+			if method == "post" {
+				hx-post="api/transactions"
+			} else {
+				hx-put="api/transactions"
+			}
+			hx-target="#transactionResponse"
 			hx-on:htmx:after-request="showToast(event)"
 		>
 			<div class="flex justify-between align-center my-4">
-				<label for="amount">Amount:</label>
-				<input class="input" type="number" step="0.01" id="amount" name="amount" required />
+				<label for={ getUniqueId(method, "amount") }>Amount:</label>
+				<input class="input" type="number" step="0.01" id={ getUniqueId(method, "amount") } name="amount" required/>
 			</div>
 			<div class="flex justify-between align-center my-4">
-				<label for="incoming">Type:</label>
-				<select class="input" id="incoming" name="incoming">
+				<label for={ getUniqueId(method, "incoming") }>Type:</label>
+				<select class="input" id={ getUniqueId(method, "incoming") } name="incoming">
 					<option value="1">Income</option>
 					<option value="0">Expense</option>
 				</select>
 			</div>
 			<div class="flex justify-between align-center my-4">
-				<label for="description">Description:</label>
-				<input class="input" type="text" id="description" name="description" required />
+				<label for={ getUniqueId(method, "description") }>Description:</label>
+				<input class="input" type="text" id={ getUniqueId(method, "description") } name="description" required/>
 			</div>
 			<div class="flex justify-between my-4">
-				<label for="recurring">Recurring:</label>
-				<select class="input" id="recurring" name="recurring">
+				<label for={ getUniqueId(method, "recurring") }>Recurring:</label>
+				<select class="input" id={ getUniqueId(method, "recurring") } name="recurring">
 					<option value="no">No</option>
 					<option value="weekly">Weekly</option>
 					<option value="monthly">Monthly</option>
 				</select>
 			</div>
 			<div class="flex justify-between my-4">
-				<label for="startdate">Date</label>
-				<input class="input" type="date" id="startdate" name="startdate" />
+				<label for={ getUniqueId(method, "startdate") }>Date</label>
+				<input class="input" type="date" id={ getUniqueId(method, "startdate") } name="startdate" required/>
 			</div>
 			<div class="flex justify-between my-4" style="display: none">
-				<label for="enddate">End date</label>
-				<input class="input" type="date" id="enddate" name="enddate" />
+				<label for={ getUniqueId(method, "enddate") }>End date</label>
+				<input class="input" type="date" id={ getUniqueId(method, "enddate") } name="enddate" />
 			</div>
 			<div>
-				<button class="button" type="submit">Add</button>
+				<button class="button" type="submit">
+					if method == "post" {
+						Add
+					} else {
+						Update
+					}
+				</button>
 			</div>
 		</form>
-        <div id="transactionResponse" class="hidden"></div>
-		<script>
-            const recurring = document.getElementById("recurring");
-            const startDateInput = document.getElementById("startdate");
-            const endDateInput = document.getElementById("enddate");
-
-            if (recurring && startDateInput && endDateInput) {
-                recurring.addEventListener('change', event => {
-                    if (recurring.value === "no") {
-                        startDateInput.labels[0].innerText = "Date";
-                        endDateInput.parentElement.style.display = "none";
-                    } else {
-                        startDateInput.labels[0].innerText = "Start date";
-                        endDateInput.parentElement.style.display = "flex";
-                    }
-                });
-            }
-        </script>
+		<div id="transactionResponse" class="hidden"></div>
+		@initializeForm(id, method)
 	</dialog>
 }
