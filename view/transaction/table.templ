@@ -17,6 +17,8 @@ script updateTransaction(transaction model.Transaction, startDateValue string, e
     const startDate = form.querySelector('#put-startdate');
     const endDate = form.querySelector('#put-enddate');
 
+    localStorage.setItem('updateTransactionId', `${transaction.Id}`);
+
     amount.value = transaction.Amount;
     if (transaction.Incoming) {
         type.value = 1;

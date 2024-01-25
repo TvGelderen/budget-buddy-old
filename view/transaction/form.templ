@@ -51,6 +51,7 @@ templ Form(id string, method string) {
 				hx-post="api/transactions"
 			} else {
 				hx-put="api/transactions"
+                hx-vals='js:{ id: getUpdateTransactionId() }'
 			}
 			hx-target="#transactionResponse"
 			hx-on:htmx:after-request="showToast(event)"

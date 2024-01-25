@@ -63,3 +63,7 @@ function closeModalOnSuccess(id, event) {
         modal.close();
     }
 }
+
+function getUpdateTransactionId() {
+    return localStorage.getItem('updateTransactionId');
+}
