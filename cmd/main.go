@@ -45,7 +45,7 @@ func main() {
 	app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
 
 	app.GET("/", apiCfg.HandleHomePage)
-	app.GET("/dashboard", middleware.Authorize(apiCfg.HandleDashboardPage))
+	app.GET("/dashboard", apiCfg.HandleDashboardPage, middleware.AuthorizePage)
 
 	app.GET("/login", apiCfg.HandleLoginPage)
 	app.GET("/logout", apiCfg.HandleLogout)

@@ -8,12 +8,14 @@ import (
 templ Register(user model.User) {
 	@layout.Base(user) {
 		<div class="bg-secondary max-w-md mx-auto p-6 rounded">
-			<h1>Login</h1>
+			<h1 class="header">Register</h1>
 			<form
 				class="max-w-md mx-auto"
 				id="registerForm"
-				hx-post="api/register"
-				hx-on::after-request="showToast(event)"
+				hx-put="api/register"
+                hx-target="#register-response"
+				hx-on::before-request="clearResponse('register-response')"
+				hx-on::after-request="showResponse('register-response', event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="username">Username:</label>
@@ -31,6 +33,7 @@ templ Register(user model.User) {
 					<button class="button" type="submit" hx-target="#registerResult">Register</button>
 				</div>
 			</form>
+            <div id="register-response" />
 		</div>
 	}
 }

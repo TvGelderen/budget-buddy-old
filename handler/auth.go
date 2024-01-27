@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/TvGelderen/budget-buddy/database"
@@ -13,83 +14,86 @@ import (
 )
 
 func (apiCfg *ApiConfig) HandleRegister(c echo.Context) error {
-    type parameters struct {
-        Username string `json:"username"`;
-        Email string `json:"email"`;
-        Password string `json:"password"`;
-    }
-    
-    params := parameters{}
-    err := json.NewDecoder(c.Request().Body).Decode(&params)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "Something went wrong.")
-    }
+	type parameters struct {
+		Username string `json:"username"`
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
-    passwordHash, err := utils.HashPassword(params.Password)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "Something went wrong.")
-    }
+	params := parameters{}
+	err := json.NewDecoder(c.Request().Body).Decode(&params)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Something went wrong."))
+	}
 
-    _, err = apiCfg.DB.CreateUser(c.Request().Context(), database.CreateUserParams{
-        ID: uuid.New(),
-        Username: params.Username,
-        Email: params.Email,
-        PasswordHash: passwordHash,
-        CreatedAt: time.Now(),
-        UpdatedAt: time.Now(),
-    })
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, "Something went wrong.")
-    }
+	passwordHash, err := utils.HashPassword(params.Password)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Something went wrong."))
+	}
 
-    c.Response().Writer.Header().Set("Hx-Redirect", "/login")
+	_, err = apiCfg.DB.CreateUser(c.Request().Context(), database.CreateUserParams{
+		ID:           uuid.New(),
+		Username:     params.Username,
+		Email:        params.Email,
+		PasswordHash: passwordHash,
+		CreatedAt:    time.Now(),
+		UpdatedAt:    time.Now(),
+	})
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+        if strings.Contains(err.Error(), "users_email_key") {
+            return c.HTML(http.StatusUnauthorized, errorHTML("That email is already taken."))
+        }
+		return c.HTML(http.StatusUnauthorized, errorHTML("Something went wrong."))
+	}
 
-    return nil
+	c.Response().Writer.Header().Set("Hx-Redirect", "/login")
+
+	return nil
 }
 
 func (apiCfg *ApiConfig) HandleLogin(c echo.Context) error {
-    type parameters struct {
-        Email string `json:"email"`;
-        Password string `json:"password"`;
-    }
+	type parameters struct {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
 
-    params := parameters{}
-    err := json.NewDecoder(c.Request().Body).Decode(&params)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusBadRequest, "Something went wrong.")
-    }
+	params := parameters{}
+	err := json.NewDecoder(c.Request().Body).Decode(&params)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Something went wrong."))
+	}
 
-    user, err := apiCfg.DB.GetUserByEmail(c.Request().Context(), params.Email)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, "Wrong email or password.")
-    }
+	user, err := apiCfg.DB.GetUserByEmail(c.Request().Context(), params.Email)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
+	}
 
-    validPassword := utils.CheckPasswordWithHash(params.Password, user.PasswordHash)
-    if !validPassword {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusUnauthorized, "Wrong email or password.")
-    }
+	validPassword := utils.CheckPasswordWithHash(params.Password, user.PasswordHash)
+	if !validPassword {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Wrong email or password."))
+	}
 
-    token, err := utils.CreateNewJWT(user.ID, user.Username)
-    if err != nil {
-        fmt.Printf("Error: %v\n", err)
-        return c.HTML(http.StatusInternalServerError, "Something went wrong.")
-    }
+	token, err := utils.CreateNewJWT(user.ID, user.Username)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusUnauthorized, errorHTML("Something went wrong."))
+	}
 
-    utils.SetToken(c.Response().Writer, token)
+	utils.SetToken(c.Response().Writer, token)
 
-    c.Response().Writer.Header().Set("Hx-Redirect", "/")
+	c.Response().Writer.Header().Set("Hx-Redirect", "/")
 
-    return nil
+	return nil
 }
 
 func (apiCfg *ApiConfig) HandleLogout(c echo.Context) error {
-    utils.RemoveToken(c.Response().Writer)
+	utils.RemoveToken(c.Response().Writer)
 
-    return c.Redirect(302, "/")
+	return c.Redirect(302, "/")
 }

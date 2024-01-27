@@ -8,12 +8,14 @@ import (
 templ Login(user model.User) {
 	@layout.Base(user) {
 		<div class="bg-secondary max-w-md mx-auto p-6 rounded">
-			<h1>Login</h1>
+			<h1 class="header">Login</h1>
 			<form
 				class="max-w-md mx-auto"
 				id="loginForm"
 				hx-post="api/login"
-				hx-on::after-request="showToast(event)"
+                hx-target="#login-response"
+				hx-on::before-request="clearResponse('login-response')"
+				hx-on::after-request="showResponse('login-response', event)"
 			>
 				<div class="flex justify-between align-center my-4">
 					<label for="email">Email:</label>
@@ -28,6 +30,7 @@ templ Login(user model.User) {
 					<span class="text-sm text-red-600">Don't have an account? <a class="hover:text-theme" href="/register">Register</a> here.</span>
 				</div>
 			</form>
+            <div id="login-response" />
 		</div>
 	}
 }

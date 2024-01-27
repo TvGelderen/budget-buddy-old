@@ -37,7 +37,14 @@ function toggleUserDropdown() {
     }
 }
 
-function showError(id, event) {
+function clearResponse(id) {
+    const element = document.getElementById(id);
+    if (!element) return;
+
+    element.innerHTML = "";
+}
+
+function showResponse(id, event) {
     const element = document.getElementById(id);
     if (!element) return;
 

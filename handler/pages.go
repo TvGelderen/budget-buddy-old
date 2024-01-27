@@ -19,7 +19,7 @@ func (apiCfg *ApiConfig) HandleDashboardPage(c echo.Context) error {
 
 func (apiCfg *ApiConfig) HandleRegisterPage(c echo.Context) error {
     user, err := apiCfg.GetUser(c.Request())
-    if err != nil {
+    if err == nil {
         return c.Redirect(302, "/")
     }
 

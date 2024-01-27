@@ -21,7 +21,7 @@ func validAuthToken(r *http.Request) error {
     return nil
 }
 
-func Authorize(next echo.HandlerFunc) echo.HandlerFunc {
+func AuthorizePage(next echo.HandlerFunc) echo.HandlerFunc {
     return func(c echo.Context) error {
         if err := validAuthToken(c.Request()); err != nil {
             return c.Redirect(302, "/login")

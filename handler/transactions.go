@@ -91,7 +91,7 @@ func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
 		EndDate     string `json:"enddate"`
 	}
 
-    user, err := apiCfg.GetUser(c.Request())
+	user, err := apiCfg.GetUser(c.Request())
 	if err != nil {
 		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}

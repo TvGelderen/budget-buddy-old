@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -57,4 +58,12 @@ func (apiCfg *ApiConfig) GetUser(r *http.Request) (model.User, error) {
 
 func render(c echo.Context, component templ.Component) error {
     return component.Render(c.Request().Context(), c.Response())
+}
+
+func errorHTML(text string) string {
+    return fmt.Sprintf("<p class='mt-6 text-error'>%s</p>", text)
+}
+
+func successHTML(text string) string {
+    return fmt.Sprintf("<p class='mt-6 text-success'>%s</p>", text)
 }
