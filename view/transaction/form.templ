@@ -54,7 +54,7 @@ templ Form(id string, method string) {
 				hx-vals="js:{ id: getUpdateTransactionId() }"
 			}
 			hx-target="#transactionResponse"
-			hx-on:htmx:after-request="showToast(event)"
+			hx-on::after-request="showToast(event); rowsUpdated()"
 		>
 			<div class="flex justify-between align-center my-4">
 				<label for={ getUniqueId(method, "amount") }>Amount:</label>
@@ -97,7 +97,7 @@ templ Form(id string, method string) {
 				</button>
 			</div>
 		</form>
-		<div id="transactionResponse" class="hidden"></div>
+		<div id="transactionResponse" class="hidden" />
 		@initializeForm(id, method)
 	</dialog>
 }

@@ -74,3 +74,8 @@ function closeModalOnSuccess(id, event) {
 function getUpdateTransactionId() {
     return localStorage.getItem('updateTransactionId');
 }
+
+function rowsUpdated() {
+    const rowsUpdatedEvent = new Event("rowRemoved");
+    document.body.dispatchEvent(rowsUpdatedEvent);
+}

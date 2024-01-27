@@ -30,3 +30,13 @@ func AuthorizePage(next echo.HandlerFunc) echo.HandlerFunc {
         return next(c)
     }
 }
+
+func AuthorizeEndpoint(next echo.HandlerFunc) echo.HandlerFunc {
+    return func(c echo.Context) error {
+        if err := validAuthToken(c.Request()); err != nil {
+            return c.String(http.StatusUnauthorized, "You are not authorized to perform this action.")
+        }
+
+        return next(c)
+    }
+}

@@ -17,12 +17,12 @@ templ Login(user model.User) {
 				hx-on::before-request="clearResponse('login-response')"
 				hx-on::after-request="showResponse('login-response', event)"
 			>
-				<div class="flex justify-between align-center my-4">
-					<label for="email">Email:</label>
+				<div class="input-container">
+					<label for="email">Email</label>
 					<input class="input" type="text" id="email" name="email" placeholer="email" required/>
 				</div>
-				<div class="flex justify-between my-4">
-					<label for="password">Password:</label>
+				<div class="input-container">
+					<label for="password">Password</label>
 					<input class="input" type="password" id="password" name="password" placeholer="password" required/>
 				</div>
 				<div class="flex justify-between items-center">

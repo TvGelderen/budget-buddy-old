@@ -153,6 +153,32 @@ func (apiCfg *ApiConfig) HandleUpdateTransactions(c echo.Context) error {
 	return c.HTML(http.StatusOK, "Transaction updated successfully.")
 }
 
+func (apiCfg *ApiConfig) HandleDeleteTransactions(c echo.Context) error {
+	user, err := apiCfg.GetUser(c.Request())
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
+	}
+
+	idString := c.Param("id")
+
+	id, err := strconv.ParseInt(idString, 10, 32)
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
+	}
+
+    err = apiCfg.DB.DeleteTransaction(c.Request().Context(), database.DeleteTransactionParams{
+		ID:     int32(id),
+		UserID: user.Id,
+	})
+	if err != nil {
+		fmt.Printf("Error: %v\n", err)
+		return c.HTML(http.StatusBadRequest, "Something went wrong.")
+	}
+
+	return c.HTML(http.StatusOK, "Transaction successfully deleted")
+}
+
 func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 	user, err := apiCfg.GetUser(c.Request())
 	if err != nil {

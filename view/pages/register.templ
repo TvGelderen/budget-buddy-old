@@ -17,16 +17,16 @@ templ Register(user model.User) {
 				hx-on::before-request="clearResponse('register-response')"
 				hx-on::after-request="showResponse('register-response', event)"
 			>
-				<div class="flex justify-between align-center my-4">
-					<label for="username">Username:</label>
+				<div class="input-container">
+					<label for="username">Username</label>
 					<input class="input" type="text" id="username" name="username" placeholer="username" required/>
 				</div>
-				<div class="flex justify-between align-center my-4">
-					<label for="email">Email:</label>
+				<div class="input-container">
+					<label for="email">Email</label>
 					<input class="input" type="text" id="email" name="email" placeholer="email" required/>
 				</div>
-				<div class="flex justify-between my-4">
-					<label for="password">Password:</label>
+				<div class="input-container">
+					<label for="password">Password</label>
 					<input class="input" type="password" id="password" name="password" placeholer="password" required/>
 				</div>
 				<div>

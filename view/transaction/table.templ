@@ -54,7 +54,7 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 			<div class="mt-2 text-lg md:text-xl">€{ strconv.FormatFloat(income - expense, 'f', -1, 64) }</div>
 		</div>
 	</div>
-	<div class="table">
+	<div class="transactions-table">
 		<div class="table-header table-item">Date</div>
 		<div class="table-header table-item">Description</div>
 		<div class="table-header table-item">Amount</div>
@@ -78,8 +78,15 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 				>
 					edit
 				</span>
+				<span
+					class="material-symbols-outlined cursor-pointer"
+					hx-delete={ fmt.Sprintf("api/transactions/%d", transaction.Id) }
+                    hx-on::after-request="rowsUpdated()"
+				>
+					delete
+				</span>
 			</div>
 		}
 	</div>
-    @Form("update-transaction-modal", "put")
+	@Form("update-transaction-modal", "put")
 }

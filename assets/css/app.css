@@ -41,7 +41,7 @@
 }
 
 .header {
-    @apply text-lg md:text-xl;
+    @apply text-xl md:text-2xl;
 }
 
 .button {
@@ -50,6 +50,10 @@
 
 .button.secondary {
     @apply bg-white/10;
+}
+
+.input-container {
+    @apply flex flex-col justify-between my-4;
 }
 
 .input {
@@ -77,8 +81,8 @@ dialog::backdrop {
     @apply text-black bg-error-background border-l-error;
 }
 
-.table {
-    @apply grid grid-cols-[repeat(4,_1fr)_60px] bg-secondary rounded-xl;
+.transactions-table {
+    @apply grid grid-cols-[repeat(4,_1fr)_100px] bg-secondary rounded-xl;
 }
 
 .table-item {
