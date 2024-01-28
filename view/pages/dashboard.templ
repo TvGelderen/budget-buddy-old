@@ -72,10 +72,10 @@ templ Dashboard(user model.User) {
 			<div
 				id="transactions-table"
 				class="col-span-5"
-				hx-get="/api/transactions"
+				hx-get="/api/transactions/table"
 				hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }"
 				hx-trigger="load, dashboardMonthSet from:document, rowRemoved from:document"
-			></div>
+			/>
 		</div>
 		@transaction.Form("add-transaction-modal", "post")
 		<script type="text/javascript">

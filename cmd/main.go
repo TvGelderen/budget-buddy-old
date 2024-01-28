@@ -55,12 +55,12 @@ func main() {
 	app.POST("/api/login", apiCfg.HandleLogin)
 	app.PUT("/api/register", apiCfg.HandleRegister)
 
-	app.GET("/api/transactions", apiCfg.HandleGetTransactions, middleware.AuthorizeEndpoint)
 	app.POST("/api/transactions", apiCfg.HandleCreateTransaction, middleware.AuthorizeEndpoint)
 	app.PUT("/api/transactions", apiCfg.HandleUpdateTransactions, middleware.AuthorizeEndpoint)
+    app.GET("/api/transactions/:id", apiCfg.HandleGetTransaction, middleware.AuthorizeEndpoint)
     app.DELETE("/api/transactions/:id", apiCfg.HandleDeleteTransactions, middleware.AuthorizeEndpoint)
-
-	app.GET("/api/transactions/:id", apiCfg.HandleGetTransaction, middleware.AuthorizeEndpoint)
+    app.GET("/api/transactions/table", apiCfg.HandleGetTransactionsTable, middleware.AuthorizeEndpoint)
+    app.GET("/api/transactions/histogram", apiCfg.HandleGetTransactionsHistogram, middleware.AuthorizeEndpoint)
 
 	app.Start(":" + port)
 }

@@ -167,7 +167,7 @@ func (apiCfg *ApiConfig) HandleDeleteTransactions(c echo.Context) error {
 		return c.HTML(http.StatusBadRequest, "Something went wrong.")
 	}
 
-    err = apiCfg.DB.DeleteTransaction(c.Request().Context(), database.DeleteTransactionParams{
+	err = apiCfg.DB.DeleteTransaction(c.Request().Context(), database.DeleteTransactionParams{
 		ID:     int32(id),
 		UserID: user.Id,
 	})
@@ -179,16 +179,16 @@ func (apiCfg *ApiConfig) HandleDeleteTransactions(c echo.Context) error {
 	return c.HTML(http.StatusOK, "Transaction successfully deleted")
 }
 
-func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
+func (apiCfg *ApiConfig) HandleGetTransactionsTable(c echo.Context) error {
 	user, err := apiCfg.GetUser(c.Request())
 	if err != nil {
-		return c.HTML(http.StatusBadRequest, "You are not logged in.")
+		return c.HTML(http.StatusBadRequest, errorHTML("You are not logged in."))
 	}
 
 	month := c.QueryParam("month")
 	date, err := time.Parse("2006-01-02", month)
 
-	dbTransactions, err := apiCfg.DB.GetUserTransactionsByMonth(c.Request().Context(), database.GetUserTransactionsByMonthParams{
+	dbTransactions, err := apiCfg.DB.GetUserTransactionsBetweenDates(c.Request().Context(), database.GetUserTransactionsBetweenDatesParams{
 		UserID: user.Id,
 		StartDate: sql.NullTime{
 			Time:  date.AddDate(0, 1, 0),
@@ -200,33 +200,33 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 		},
 	})
 	if err != nil {
-		return c.HTML(http.StatusBadRequest, "Something went wrong.")
+		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
 	}
 
 	var transactions []model.Transaction
 
 	for i := 0; i < len(dbTransactions); i++ {
-		var transactionDate = dbTransactions[i].StartDate
+        var transactionDate = dbTransactions[i].StartDate.Time
 
 		if dbTransactions[i].Recurring == "monthly" {
-			for transactionDate.Time.Before(date) {
-				transactionDate.Time = transactionDate.Time.AddDate(0, 1, 0)
+			for transactionDate.Before(date) {
+				transactionDate = transactionDate.AddDate(0, 1, 0)
 			}
 		}
 		if dbTransactions[i].Recurring == "weekly" {
-			for transactionDate.Time.Before(date) {
-				transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+			for transactionDate.Before(date) {
+				transactionDate = transactionDate.AddDate(0, 0, 7)
 			}
-			for transactionDate.Time.Before(date.AddDate(0, 1, 0)) &&
-				transactionDate.Time.Before(dbTransactions[i].EndDate.Time) {
-				transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
-				transactionDate.Time = transactionDate.Time.AddDate(0, 0, 7)
+			for transactionDate.Before(date.AddDate(0, 1, 0)) &&
+				transactionDate.Before(dbTransactions[i].EndDate.Time) {
+				transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate))
+				transactionDate = transactionDate.AddDate(0, 0, 7)
 			}
 			continue
 		}
 
-		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate.Time))
-	}
+		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate))
+    }
 
 	var income float64
 	var expense float64
@@ -244,6 +244,60 @@ func (apiCfg *ApiConfig) HandleGetTransactions(c echo.Context) error {
 	})
 
 	return render(c, transaction.Table(transactions, income, expense))
+}
+
+func (apiCfg *ApiConfig) HandleGetTransactionsHistogram(c echo.Context) error {
+	user, err := apiCfg.GetUser(c.Request())
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, errorHTML("You are not logged in."))
+	}
+
+	year := time.Now().Year()
+	startDate := time.Date(year, 1, 1, 0, 0, 0, 0, time.UTC)
+	endDate := time.Date(year+1, 1, 1, 0, 0, 0, 0, time.UTC)
+
+	dbTransactions, err := apiCfg.DB.GetUserTransactionsBetweenDates(c.Request().Context(), database.GetUserTransactionsBetweenDatesParams{
+		UserID: user.Id,
+		StartDate: sql.NullTime{
+			Time:  endDate,
+			Valid: err == nil,
+		},
+		EndDate: sql.NullTime{
+			Time:  startDate,
+			Valid: err == nil,
+		},
+	})
+	if err != nil {
+		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
+	}
+
+	month := startDate.AddDate(0, 1, 0)
+    var transactions = make(map[int][]model.Transaction)
+
+	for month.Before(endDate) {
+		for i := 0; i < len(dbTransactions); i++ {
+			if dbTransactions[i].Recurring == "monthly" {
+				for dbTransactions[i].StartDate.Time.Before(month) {
+					dbTransactions[i].StartDate.Time = dbTransactions[i].StartDate.Time.AddDate(0, 1, 0)
+				}
+			}
+			if dbTransactions[i].Recurring == "weekly" {
+				for dbTransactions[i].StartDate.Time.Before(month) {
+					dbTransactions[i].StartDate.Time = dbTransactions[i].StartDate.Time.AddDate(0, 0, 7)
+				}
+				for dbTransactions[i].StartDate.Time.Before(month.AddDate(0, 1, 0)) &&
+					dbTransactions[i].StartDate.Time.Before(dbTransactions[i].EndDate.Time) {
+                    transactions[int(month.Month()) - 1] = append(transactions[int(month.Month()) - 1], mapDbTransactionToTransaction(dbTransactions[i], dbTransactions[i].StartDate.Time)) 
+					dbTransactions[i].StartDate.Time = dbTransactions[i].StartDate.Time.AddDate(0, 0, 7)
+				}
+				continue
+			}
+
+            transactions[int(month.Month()) - 1] = append(transactions[int(month.Month()) - 1], mapDbTransactionToTransaction(dbTransactions[i], dbTransactions[i].StartDate.Time)) 
+		}
+	}
+
+	return c.HTML(http.StatusOK, "Transaction histogram")
 }
 
 func (apiCfg *ApiConfig) HandleGetTransaction(c echo.Context) error {

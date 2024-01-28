@@ -195,19 +195,19 @@ func (q *Queries) GetUserTransactions(ctx context.Context, userID uuid.UUID) ([]
 	return items, nil
 }
 
-const getUserTransactionsByMonth = `-- name: GetUserTransactionsByMonth :many
+const getUserTransactionsBetweenDates = `-- name: GetUserTransactionsBetweenDates :many
 SELECT id, user_id, amount, incoming, description, recurring, start_date, end_date FROM transactions 
 WHERE user_id = $1 AND start_date < $2 AND end_date >= $3
 `
 
-type GetUserTransactionsByMonthParams struct {
+type GetUserTransactionsBetweenDatesParams struct {
 	UserID    uuid.UUID
 	StartDate sql.NullTime
 	EndDate   sql.NullTime
 }
 
-func (q *Queries) GetUserTransactionsByMonth(ctx context.Context, arg GetUserTransactionsByMonthParams) ([]Transaction, error) {
-	rows, err := q.db.QueryContext(ctx, getUserTransactionsByMonth, arg.UserID, arg.StartDate, arg.EndDate)
+func (q *Queries) GetUserTransactionsBetweenDates(ctx context.Context, arg GetUserTransactionsBetweenDatesParams) ([]Transaction, error) {
+	rows, err := q.db.QueryContext(ctx, getUserTransactionsBetweenDates, arg.UserID, arg.StartDate, arg.EndDate)
 	if err != nil {
 		return nil, err
 	}
