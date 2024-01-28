@@ -71,7 +71,7 @@ templ Table(transactions []model.Transaction, income float64, expense float64) {
 					Expense
 				}
 			</div>
-			<div class="table-item">
+			<div class="table-item justify-between">
 				<span
 					class="material-symbols-outlined cursor-pointer"
 					onclick={ updateTransaction(transaction, transaction.StartDate.Format("2006-01-02"), transaction.EndDate.Format("2006-01-02")) }

@@ -77,5 +77,5 @@ function getUpdateTransactionId() {
 
 function rowsUpdated() {
     const rowsUpdatedEvent = new Event("rowRemoved");
-    document.body.dispatchEvent(rowsUpdatedEvent);
+    document.dispatchEvent(rowsUpdatedEvent);
 }

@@ -13,8 +13,9 @@ templ Header(user model.User) {
 					<a class="mr-3 text-2xl font-black no-underline text-theme" href="/">BudgetBuddy</a>
 				</div>
 				<nav class="flex flex-col md:flex-row md:items-center ml-2 md:ml-6 mt-4 md:mt-0">
-					<a class="mr-4 text-lg lg:text-xl no-underline hover:text-theme active:text-theme" href="/">Home</a>
-					<a class="mr-4 text-lg lg:text-xl no-underline hover:text-theme" href="/dashboard">Dashboard</a>
+					<a class="nav-link" href="/">Home</a>
+					<a class="nav-link" href="/dashboard">Dashboard</a>
+					<a class="nav-link" href="/analytics">Analytics</a>
 				</nav>
 				<div id="user-dropdown" class="hidden md:block relative">
 					<span class="material-symbols-outlined text-3xl cursor-pointer" onclick="toggleUserDropdown()">person</span>

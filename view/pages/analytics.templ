@@ -1,0 +1,12 @@
+package pages
+
+import (
+	"github.com/TvGelderen/budget-buddy/model"
+	"github.com/TvGelderen/budget-buddy/view/layout"
+)
+
+templ Analytics(user model.User) {
+	@layout.Base(user) {
+		<h1 class="text-xl md:text-2xl">Analytics</h1>
+	}
+}

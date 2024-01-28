@@ -46,16 +46,13 @@ script setDashboardMonth(month string) {
     localStorage.setItem("dashboardMonth", month)
     
     const setMonthEvent = new Event("dashboardMonthSet");
-    document.body.dispatchEvent(setMonthEvent);
+    document.dispatchEvent(setMonthEvent);
 }
 
 templ Dashboard(user model.User) {
 	@layout.Base(user) {
 		<div class="flex justify-end">
 			@transaction.Add()
-			<button class="button secondary ml-4">
-				<span class="material-symbols-outlined text-lg">refresh</span>
-			</button>
 		</div>
 		<div class="grid grid-cols-6 mt-4">
 			<div class="col-span-1">
@@ -77,7 +74,7 @@ templ Dashboard(user model.User) {
 				class="col-span-5"
 				hx-get="/api/transactions"
 				hx-vals="js:{ month: localStorage.getItem('dashboardMonth') }"
-				hx-trigger="load, click from:previous button, dashboardMonthSet from:body, rowRemoved from:body"
+				hx-trigger="load, dashboardMonthSet from:document, rowRemoved from:document"
 			></div>
 		</div>
 		@transaction.Form("add-transaction-modal", "post")
