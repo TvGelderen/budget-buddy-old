@@ -1,0 +1,11 @@
+package transaction
+
+import "fmt"
+
+templ Histogram(income []float64, expense []float64) {
+    <div>Histogram</div>
+    for i := 0; i < len(income); i++ {
+        <div>Income: { fmt.Sprintf("%.2f", income[i]) }</div>
+        <div>Expense: { fmt.Sprintf("%.2f", expense[i]) }</div>
+    }
+}

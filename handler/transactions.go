@@ -206,7 +206,7 @@ func (apiCfg *ApiConfig) HandleGetTransactionsTable(c echo.Context) error {
 	var transactions []model.Transaction
 
 	for i := 0; i < len(dbTransactions); i++ {
-        var transactionDate = dbTransactions[i].StartDate.Time
+		var transactionDate = dbTransactions[i].StartDate.Time
 
 		if dbTransactions[i].Recurring == "monthly" {
 			for transactionDate.Before(date) {
@@ -226,7 +226,7 @@ func (apiCfg *ApiConfig) HandleGetTransactionsTable(c echo.Context) error {
 		}
 
 		transactions = append(transactions, mapDbTransactionToTransaction(dbTransactions[i], transactionDate))
-    }
+	}
 
 	var income float64
 	var expense float64
@@ -271,11 +271,22 @@ func (apiCfg *ApiConfig) HandleGetTransactionsHistogram(c echo.Context) error {
 		return c.HTML(http.StatusBadRequest, errorHTML("Something went wrong."))
 	}
 
-	month := startDate.AddDate(0, 1, 0)
-    var transactions = make(map[int][]model.Transaction)
+	month := startDate
+	var income []float64
+    var expense []float64
 
 	for month.Before(endDate) {
+        income = append(income, 0)
+        expense = append(expense, 0)
+        monthIndex := month.Month() - 1
+
 		for i := 0; i < len(dbTransactions); i++ {
+            if dbTransactions[i].EndDate.Time.Before(month) ||
+               dbTransactions[i].StartDate.Time.After(month.AddDate(0, 1, 0)) ||
+               dbTransactions[i].StartDate.Time.After(dbTransactions[i].EndDate.Time) {
+                continue
+            }
+
 			if dbTransactions[i].Recurring == "monthly" {
 				for dbTransactions[i].StartDate.Time.Before(month) {
 					dbTransactions[i].StartDate.Time = dbTransactions[i].StartDate.Time.AddDate(0, 1, 0)
@@ -287,17 +298,31 @@ func (apiCfg *ApiConfig) HandleGetTransactionsHistogram(c echo.Context) error {
 				}
 				for dbTransactions[i].StartDate.Time.Before(month.AddDate(0, 1, 0)) &&
 					dbTransactions[i].StartDate.Time.Before(dbTransactions[i].EndDate.Time) {
-                    transactions[int(month.Month()) - 1] = append(transactions[int(month.Month()) - 1], mapDbTransactionToTransaction(dbTransactions[i], dbTransactions[i].StartDate.Time)) 
+					if dbTransactions[i].Incoming {
+						income[monthIndex] += dbTransactions[i].Amount
+					} else {
+						expense[monthIndex] += dbTransactions[i].Amount
+					}
 					dbTransactions[i].StartDate.Time = dbTransactions[i].StartDate.Time.AddDate(0, 0, 7)
 				}
 				continue
 			}
 
-            transactions[int(month.Month()) - 1] = append(transactions[int(month.Month()) - 1], mapDbTransactionToTransaction(dbTransactions[i], dbTransactions[i].StartDate.Time)) 
-		}
-	}
+            if dbTransactions[i].StartDate.Time.After(dbTransactions[i].EndDate.Time) {
+                continue
+            }
 
-	return c.HTML(http.StatusOK, "Transaction histogram")
+			if dbTransactions[i].Incoming {
+				income[monthIndex] += dbTransactions[i].Amount
+			} else {
+				expense[monthIndex] += dbTransactions[i].Amount
+			}
+		}
+
+        month = month.AddDate(0, 1, 0)
+	}
+    
+    return render(c, transaction.Histogram(income, expense))
 }
 
 func (apiCfg *ApiConfig) HandleGetTransaction(c echo.Context) error {
