@@ -2,10 +2,36 @@ package transaction
 
 import "fmt"
 
-templ Histogram(income []float64, expense []float64) {
-    <div>Histogram</div>
-    for i := 0; i < len(income); i++ {
-        <div>Income: { fmt.Sprintf("%.2f", income[i]) }</div>
-        <div>Expense: { fmt.Sprintf("%.2f", expense[i]) }</div>
+script initializeHistogram(income []float64, expense []float64) {
+    let max = 0;
+    
+    for (let i = 0; i < income.length; i++) {
+        if (income[i] + expense[i] > max) {
+            max = income[i] + expense[i];
+        }
     }
+
+    for (let i = 0; i < income.length; i++) {
+        const incomeBar = document.getElementById(`income-${i}`);
+        const expenseBar = document.getElementById(`expense-${i}`);
+
+        const incomeHeight = income[i] / max * 400;
+        const expenseHeight = expense[i] / max * 400;
+
+        incomeBar.style.height = `${incomeHeight}px`;
+        expenseBar.style.height = `${expenseHeight}px`
+    }
+}
+
+templ Histogram(income []float64, expense []float64) {
+	<div>Histogram</div>
+	<div class="flex h-[400px]">
+		for i := 0; i < len(income); i++ {
+			<div class="flex flex-col justify-end mr-4">
+				<div id={ fmt.Sprintf("expense-%d", i) } class="bg-error w-[40px]" />
+				<div id={ fmt.Sprintf("income-%d", i) } class="bg-success w-[40px]" />
+			</div>
+		}
+	</div>
+    @initializeHistogram(income, expense)
 }
