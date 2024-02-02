@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const colors = require('tailwindcss/colors')
+
 module.exports = {
     content: [
         './view/**/*.templ',
@@ -6,6 +8,7 @@ module.exports = {
     ],
     theme: {
         colors: {
+            ...colors,
             'primary': '#121212',
             'secondary': '#181818',
             'tertiary': '#202020',

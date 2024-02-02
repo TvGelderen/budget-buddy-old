@@ -46,7 +46,6 @@ func main() {
 
 	app.GET("/", apiCfg.HandleHomePage)
 	app.GET("/dashboard", apiCfg.HandleDashboardPage, middleware.AuthorizePage)
-	app.GET("/analytics", apiCfg.HandleAnalyticsPage, middleware.AuthorizePage)
 
 	app.GET("/login", apiCfg.HandleLoginPage)
 	app.GET("/logout", apiCfg.HandleLogout)
@@ -60,7 +59,6 @@ func main() {
     app.GET("/api/transactions/:id", apiCfg.HandleGetTransaction, middleware.AuthorizeEndpoint)
     app.DELETE("/api/transactions/:id", apiCfg.HandleDeleteTransactions, middleware.AuthorizeEndpoint)
     app.GET("/api/transactions/table", apiCfg.HandleGetTransactionsTable, middleware.AuthorizeEndpoint)
-    app.GET("/api/transactions/histogram", apiCfg.HandleGetTransactionsHistogram, middleware.AuthorizeEndpoint)
 
 	app.Start(":" + port)
 }
