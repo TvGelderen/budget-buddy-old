@@ -12,6 +12,7 @@ import (
 	"github.com/TvGelderen/budget-buddy/middleware"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
+	echoMiddleware "github.com/labstack/echo/v4/middleware"
 
 	_ "github.com/lib/pq"
 )
@@ -40,6 +41,8 @@ func main() {
 	}
 
 	app := echo.New()
+
+    app.Use(echoMiddleware.CORSWithConfig(echoMiddleware.DefaultCORSConfig))
 
 	fs := http.FileServer(http.Dir("assets"))
 	app.GET("/assets/*", echo.WrapHandler(http.StripPrefix("/assets/", fs)))
