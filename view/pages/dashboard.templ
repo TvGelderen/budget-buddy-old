@@ -41,7 +41,9 @@ script setDashboardMonth(month string) {
     const prevSelected = document.getElementById(prev)
     const selected = document.getElementById(month)
 
-    prevSelected.classList.remove("text-theme")
+    if (prevSelected) {
+        prevSelected.classList.remove("text-theme")
+    }
     selected.classList.add("text-theme")
     localStorage.setItem("dashboardMonth", month)
     
